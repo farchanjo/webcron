@@ -6,9 +6,8 @@ import br.eti.archanjo.webcron.dtos.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -20,7 +19,7 @@ public class CronFacade {
         this.cron = cron;
     }
 
-    public List<JobsDTO> listJobs(UserDTO client, Integer limit, Integer page) {
+    public Page<JobsDTO> listJobs(UserDTO client, Integer limit, Integer page) {
         return cron.listJobs(client, limit, page);
     }
 }

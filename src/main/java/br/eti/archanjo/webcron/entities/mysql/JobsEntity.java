@@ -1,6 +1,7 @@
 package br.eti.archanjo.webcron.entities.mysql;
 
 import br.eti.archanjo.webcron.enums.AsyncType;
+import br.eti.archanjo.webcron.enums.Status;
 import lombok.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -37,6 +38,10 @@ public class JobsEntity implements Serializable {
 
     @Column(name = "fixedRate")
     private Integer fixedRate;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
+    private Status status;
 
     @Column(name = "unit")
     private TimeUnit unit;
