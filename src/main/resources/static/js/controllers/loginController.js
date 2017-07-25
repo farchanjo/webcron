@@ -8,7 +8,10 @@ angular.module('webCronApp')
                 $log.debug("Doing login");
                 LoginService.doLogin($scope.username, $scope.password)
                     .then(function (res) {
-
+                        if (res) {
+                            $log.debug("login done");
+                            $location.path("#!/");
+                        }
                     }, function (err) {
                         $log.debug(err);
                     });
