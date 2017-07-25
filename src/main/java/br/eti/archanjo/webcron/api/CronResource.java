@@ -22,7 +22,7 @@ public class CronResource extends GenericResource {
         this.cronFacade = cronFacade;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(path = PathContants.JOBS, method = RequestMethod.GET)
     public List<JobsDTO> listJobs(@RequestParam(value = "limit") Integer limit,
                                   @RequestParam(value = "page") Integer page) throws Exception {
         return cronFacade.listJobs(getClient(), limit, page);

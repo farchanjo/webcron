@@ -27,7 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Autowired
-    public SecurityConfig(SecurityProvider provider, CsrfHeaderFilter csrfHeaderFilter, CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
+    public SecurityConfig(SecurityProvider provider, CsrfHeaderFilter csrfHeaderFilter,
+                          CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
         this.provider = provider;
         this.csrfHeaderFilter = csrfHeaderFilter;
         this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
@@ -50,10 +51,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage(PathContants.API + PathContants.LOGIN).passwordParameter("password").usernameParameter("emailorusername").permitAll()
                 .and()
                 .logout().logoutUrl(PathContants.API + PathContants.LOGOUT).permitAll()
-                .invalidateHttpSession(true)
                 .logoutSuccessHandler(
                         (request, response, authentication) -> response.sendError(200, "logout ok")
                 )
+                .and()
+                .rememberMe()
                 .and()
                 .exceptionHandling().accessDeniedHandler(customAuthenticationEntryPoint).authenticationEntryPoint(customAuthenticationEntryPoint)
                 .and()

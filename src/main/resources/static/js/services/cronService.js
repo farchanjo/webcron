@@ -8,7 +8,7 @@ angular.module('webCronApp')
         this.listJobs = function (page, limit) {
             var req = {
                 method: 'GET',
-                url: '/cron',
+                url: '/cron/jobs',
                 params: {page: page, limit: limit},
                 headers: {
                     'Accept': 'application/json',
