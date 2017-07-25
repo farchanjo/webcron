@@ -1,8 +1,11 @@
 package br.eti.archanjo.webcron.configs.main;
 
+import br.eti.archanjo.webcron.entities.mysql.JobsEntity;
 import br.eti.archanjo.webcron.entities.mysql.UserEntity;
+import br.eti.archanjo.webcron.enums.AsyncType;
 import br.eti.archanjo.webcron.enums.Roles;
 import br.eti.archanjo.webcron.enums.Status;
+import br.eti.archanjo.webcron.repositories.mysql.JobsRepository;
 import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
 import br.eti.archanjo.webcron.utils.HashUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.session.data.redis.RedisFlushMode;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication(scanBasePackages = "br.eti.archanjo")
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 86400,
@@ -20,12 +26,15 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
         redisNamespace = "webcron")
 @EnableJpaRepositories("br.eti.archanjo.webcron.repositories.mysql")
 @EntityScan("br.eti.archanjo.webcron.entities.mysql")
+@Transactional
 public class WebcronApplication implements CommandLineRunner {
     private final UserRepository userRepository;
+    private final JobsRepository jobsRepository;
 
     @Autowired
-    public WebcronApplication(UserRepository userRepository) {
+    public WebcronApplication(UserRepository userRepository, JobsRepository jobsRepository) {
         this.userRepository = userRepository;
+        this.jobsRepository = jobsRepository;
     }
 
     public static void main(String[] args) {
@@ -42,6 +51,32 @@ public class WebcronApplication implements CommandLineRunner {
                 .email("farchanjo@gmail.com")
                 .roles(Roles.USER)
                 .build();
-        userRepository.save(entity);
+        entity = userRepository.save(entity);
+        JobsEntity jobsEntity = JobsEntity.builder()
+                .name("Teste")
+                .fixedRate(10)
+                .unit(TimeUnit.DAYS)
+                .async(AsyncType.PERIODIC)
+                .build();
+
+        JobsEntity jobsEntity2 = JobsEntity.builder()
+                .name("Teste 2")
+                .fixedRate(10)
+                .unit(TimeUnit.SECONDS)
+                .async(AsyncType.PERIODIC)
+                .build();
+
+        JobsEntity jobsEntity3 = JobsEntity.builder()
+                .name("Teste 3")
+                .unit(TimeUnit.HOURS)
+                .fixedRate(10)
+                .async(AsyncType.PERIODIC)
+                .build();
+        jobsEntity.setUser(entity);
+        jobsEntity2.setUser(entity);
+        jobsEntity3.setUser(entity);
+        jobsRepository.save(jobsEntity);
+        jobsRepository.save(jobsEntity2);
+        jobsRepository.save(jobsEntity3);
     }
 }
