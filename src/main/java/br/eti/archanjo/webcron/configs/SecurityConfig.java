@@ -2,24 +2,31 @@ package br.eti.archanjo.webcron.configs;
 
 import br.eti.archanjo.webcron.constants.ExceptionConstants;
 import br.eti.archanjo.webcron.constants.PathContants;
+import br.eti.archanjo.webcron.filters.CsrfHeaderFilter;
 import br.eti.archanjo.webcron.filters.CustomAuthenticationEntryPoint;
 import br.eti.archanjo.webcron.providers.SecurityProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SecurityProvider provider;
+    private final CsrfHeaderFilter csrfHeaderFilter;
 
     @Autowired
-    public SecurityConfig(SecurityProvider provider) {
+    public SecurityConfig(SecurityProvider provider, CsrfHeaderFilter csrfHeaderFilter) {
         this.provider = provider;
+        this.csrfHeaderFilter = csrfHeaderFilter;
     }
 
     @Override
@@ -27,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .anyRequest().permitAll()
                 .and()
+                .addFilterAfter(csrfHeaderFilter, CsrfFilter.class)
                 .formLogin()
                 .failureHandler(
                         (request, response, exception) -> response.sendError(400, ExceptionConstants.PASSWORD_DOES_NOT_MATCH)
@@ -48,7 +56,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .frameOptions().sameOrigin()
                 .and()
-                .csrf().disable();
+                .csrf().csrfTokenRepository(csrfTokenRepository());
+    }
+
+    @Bean
+    public CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
     }
 
     @Autowired
