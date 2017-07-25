@@ -1,27 +1,9 @@
 angular.module('webCronApp')
-    .controller('HomeCtrl', function ($scope, $location, $log, WsService) {
+    .controller('HomeCtrl', function ($scope, $log, CronService) {
         $scope.payload = null;
+        $log.debug("Home Controller has been load.");
 
-
-        /**
-         * OnLoad
-         */
-        $scope.$on('$viewContentLoaded', function () {
-            WsService.getConnection()
-                .then(function () {
-                    WsService.getStomp().subscribe('/topic/listjobs', function (payload, headers, res) {
-                        $scope.payload = payload;
-                        $scope.$apply();
-                    });
-                });
-        });
-
-        /**
-         * On destroy
-         */
-        $scope.$on('$destroy', function () {
-            WsService.getStomp().disconnect().then(function () {
-                $log.info("Sockect disconnect");
-            })
+        CronService.listJobs(0, 10).then(function (res) {
+            $log.debug(res);
         })
     });
