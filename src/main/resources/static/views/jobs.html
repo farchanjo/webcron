@@ -1,7 +1,82 @@
 <div class="row">
-    <div class="col-md-3 col-md-offset-3">
-        <p>
-            {{payload | json }}
-        </p>
+    <div class="col-md-8">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Type
+                    </th>
+                    <th>
+                        Rate
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Unit
+                    </th>
+                    <th>
+                        Cron
+                    </th>
+                    <th>
+                        Modified
+                    </th>
+                    <th>
+                        Created
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="job in content.content">
+                    <td>
+                        {{job.id}}
+                    </td>
+                    <td>
+                        {{job.name}}
+                    </td>
+                    <td>
+                        {{job.async}}
+                    </td>
+                    <td>
+                        {{job.fixedRate}}
+                    </td>
+                    <td>
+                        {{job.status}}
+                    </td>
+                    <td>
+                        {{job.unit}}
+                    </td>
+                    <td>
+                        {{job.cron}}
+                    </td>
+                    <td>
+                        {{job.modified | date:'dd/MM/yyyy - HH:mm:ss'}}
+                    </td>
+                    <td>
+                        {{job.created | date:'dd/MM/yyyy - HH:mm:ss'}}
+                    </td>
+                    <td>
+                        <span ng-click="editJob(job)">Edit</span>
+                    </td>
+                    <td>
+                        <span ng-click="deleteJob(job)">Delete</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

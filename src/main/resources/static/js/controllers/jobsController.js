@@ -1,8 +1,19 @@
 angular.module('webCronApp')
-    .controller('JobsCtrl', function ($scope, $log, CronService) {
+    .controller('JobsCtrl', function ($scope, $log, JobsService) {
         $log.debug("Jobs Controller has been load.");
+        $scope.content = [];
 
-        CronService.listJobs(0, 10).then(function (res) {
-            $log.debug(res);
-        })
+
+
+        JobsService.listJobs(0, 10).then(function (res) {
+            $scope.content = res.data;
+        });
+
+        $scope.editJob = function (job) {
+            $log.info(job);
+        };
+
+        $scope.deleteJob = function (job) {
+            $log.info(job);
+        };
     });

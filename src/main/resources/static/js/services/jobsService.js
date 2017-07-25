@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('webCronApp')
-    .service('CronService', function ($http, $cookies) {
+    .service('JobsService', function ($http, $cookies) {
         /**
          * @returns Promisse
          */

@@ -22,22 +22,22 @@ angular
     ])
     .config(function ($routeProvider) {
         $routeProvider
-            .when('#!/', {
+            .when('/', {
                 templateUrl: 'views/home.html',
                 controller: 'HomeCtrl',
                 controllerAs: 'home'
             })
-            .when('#!/login', {
+            .when('/login', {
                 templateUrl: 'views/login.html',
                 controller: 'LoginCtrl',
                 controllerAs: 'login'
             })
-            .when('#!/jobs', {
+            .when('/jobs', {
                 templateUrl: 'views/jobs.html',
                 controller: 'JobsCtrl',
                 controllerAs: 'jobs'
             })
             .otherwise({
-                redirectTo: '#!/'
+                redirectTo: '/'
             });
     });
