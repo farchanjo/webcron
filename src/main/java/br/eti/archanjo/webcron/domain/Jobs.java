@@ -14,15 +14,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class Cron {
+public class Jobs {
     private final JobsRepository jobsRepository;
 
     @Autowired
-    public Cron(JobsRepository jobsRepository) {
+    public Jobs(JobsRepository jobsRepository) {
         this.jobsRepository = jobsRepository;
     }
 
-    public Page<JobsDTO> listJobs(UserDTO client, Integer limit, Integer page) {
+    public Page<JobsDTO> listAll(UserDTO client, Integer limit, Integer page) {
         Page<JobsEntity> jobs = jobsRepository.findAllByUserId(client.getId(), new PageRequest(page, limit));
         return jobs.map(JobsParser::toDTO);
     }

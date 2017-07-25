@@ -9,4 +9,5 @@ public class PathContants {
     public static final String LOGOUT = "/logout";
     public static final String CRON = "/cron";
     public static final String JOBS = "/jobs";
+    public static final String ALL = "/all";
 }
