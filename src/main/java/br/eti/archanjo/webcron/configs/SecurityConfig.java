@@ -56,7 +56,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .frameOptions().sameOrigin()
                 .and()
-                .csrf().csrfTokenRepository(csrfTokenRepository());
+                .csrf()
+                .ignoringAntMatchers(PathContants.API + PathContants.LOGIN + "/**", PathContants.API + PathContants.LOGOUT + "/**")
+                .csrfTokenRepository(csrfTokenRepository());
     }
 
     @Bean
