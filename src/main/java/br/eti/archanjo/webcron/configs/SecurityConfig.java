@@ -6,8 +6,10 @@ import br.eti.archanjo.webcron.filters.CsrfHeaderFilter;
 import br.eti.archanjo.webcron.filters.CustomAuthenticationEntryPoint;
 import br.eti.archanjo.webcron.providers.SecurityProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,11 +24,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SecurityProvider provider;
     private final CsrfHeaderFilter csrfHeaderFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Autowired
-    public SecurityConfig(SecurityProvider provider, CsrfHeaderFilter csrfHeaderFilter) {
+    public SecurityConfig(SecurityProvider provider, CsrfHeaderFilter csrfHeaderFilter, CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
         this.provider = provider;
         this.csrfHeaderFilter = csrfHeaderFilter;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
     }
 
     @Override
@@ -51,18 +55,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         (request, response, authentication) -> response.sendError(200, "logout ok")
                 )
                 .and()
-                .exceptionHandling().accessDeniedHandler(new CustomAuthenticationEntryPoint()).authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .exceptionHandling().accessDeniedHandler(customAuthenticationEntryPoint).authenticationEntryPoint(customAuthenticationEntryPoint)
                 .and()
                 .headers().xssProtection().block(true)
                 .and()
                 .frameOptions().sameOrigin()
                 .and()
                 .csrf()
-                .ignoringAntMatchers(PathContants.API + PathContants.LOGIN + "/**", PathContants.API + PathContants.LOGOUT + "/**")
+                .ignoringAntMatchers(PathContants.API + PathContants.LOGIN, PathContants.API + PathContants.LOGOUT)
                 .csrfTokenRepository(csrfTokenRepository());
     }
 
     @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public CsrfTokenRepository csrfTokenRepository() {
         HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
         repository.setHeaderName("X-XSRF-TOKEN");
