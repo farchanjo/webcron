@@ -33,8 +33,8 @@ public class Schedulers implements SchedulingConfigurer {
         taskRegistrar.setTaskScheduler(taskSchedulerExecutor);
     }
 
-    @Scheduled(fixedRate = 15000)
+    @Scheduled(fixedRate = 5000)
     private void teste() {
-        messagingTemplate.convertAndSend("/topic/greetings", "haha");
+        messagingTemplate.convertAndSend("/topic/greetings", "{\"fabricio\":\"haha\"}");
     }
 }
