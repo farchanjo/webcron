@@ -7,4 +7,5 @@ public class PathContants {
     public static final String API = "/api";
     public static final String LOGIN = "/login";
     public static final String LOGOUT = "/logout";
+    public static final String CRON = "/cron";
 }

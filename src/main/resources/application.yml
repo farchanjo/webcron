@@ -41,3 +41,8 @@ server:
 management:
   context-path: /management
   port: 8081
+
+webcron:
+  httplimits:
+    limit: 100
+    page: 0

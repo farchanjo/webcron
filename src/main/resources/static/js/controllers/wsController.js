@@ -1,7 +1,6 @@
 angular.module('webCronApp')
-    .controller('HomeCtrl', function ($scope, $location, $log, WsService) {
+    .controller('WsCtrl', function ($scope, $location, $log, WsService) {
         $scope.payload = null;
-
 
         /**
          * OnLoad
