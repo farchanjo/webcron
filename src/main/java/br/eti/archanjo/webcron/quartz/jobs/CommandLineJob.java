@@ -75,7 +75,7 @@ public class CommandLineJob implements Job {
             logger.info(String.format("%s folder created", logFolder.toAbsolutePath()));
         }
         Path logPath = Paths.get(getLoggingConfig().getFolder(), String.format("%s-%s-output.log", getJob().getId(), getJob().getName()));
-        pb.redirectOutput(logPath.toFile());
-        pb.redirectError(logPath.toFile());
+        pb.redirectError(ProcessBuilder.Redirect.appendTo(logPath.toFile()));
+        pb.redirectOutput(ProcessBuilder.Redirect.appendTo(logPath.toFile()));
     }
 }
