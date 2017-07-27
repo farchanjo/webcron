@@ -33,7 +33,7 @@ public class Jobs {
      * @return {@link Page<JobsDTO>}
      */
     public Page<JobsDTO> listAll(UserDTO client,
-                                 Integer limit, Integer page) {
+                                 Integer limit, Integer page) throws Exception {
         Page<JobsEntity> jobs = jobsRepository.findAllByUserIdOrderByIdDesc(client.getId(),
                 new PageRequest(page, limit));
         return jobs.map(JobsParser::toDTO);
@@ -44,7 +44,7 @@ public class Jobs {
      * @param job    {@link JobsDTO}
      * @return {@link JobsDTO}
      */
-    public JobsDTO save(UserDTO client, JobsDTO job) {
+    public JobsDTO save(UserDTO client, JobsDTO job) throws Exception {
         JobsEntity entity = jobsRepository.findOne(job.getId());
         if (entity != null) {
             entity.setName(job.getName());

@@ -25,7 +25,7 @@ public class JobsFacade {
      * @param page   {@link Integer}
      * @return {@link Page<JobsDTO>}
      */
-    public Page<JobsDTO> listAll(UserDTO client, Integer limit, Integer page) {
+    public Page<JobsDTO> listAll(UserDTO client, Integer limit, Integer page) throws Exception {
         return jobs.listAll(client, limit, page);
     }
 
@@ -34,7 +34,7 @@ public class JobsFacade {
      * @param job    {@link JobsDTO }
      * @return {@link JobsDTO}
      */
-    public JobsDTO save(UserDTO client, JobsDTO job) {
+    public JobsDTO save(UserDTO client, JobsDTO job) throws Exception {
         return jobs.save(client, job);
     }
 }
