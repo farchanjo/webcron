@@ -20,13 +20,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Web Crons</a>
+                <span class="navbar-brand">Web Crons</span>
             </div>
             <a href="#" ng-click="logout()" class="navbar-brand pull-right"><strong>{{me.name}}</strong></a>
-
             <div class="collapse navbar-collapse" id="js-navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="#!/login">Login</a></li>
+                    <li><a href="#!/home">Home</a></li>
                     <li><a href="#!/jobs">Jobs</a></li>
                 </ul>
             </div>
@@ -55,9 +54,11 @@
 <script type="text/javascript" src="js/services/wsService.js"></script>
 <script type="text/javascript" src="js/services/loginService.js"></script>
 <script type="text/javascript" src="js/services/jobsService.js"></script>
+<script type="text/javascript" src="js/services/usersService.js"></script>
 <script type="text/javascript" src="js/controllers/navController.js"></script>
 <script type="text/javascript" src="js/controllers/homeController.js"></script>
 <script type="text/javascript" src="js/controllers/loginController.js"></script>
 <script type="text/javascript" src="js/controllers/jobsController.js"></script>
 <script type="text/javascript" src="js/controllers/modalJobsController.js"></script>
+
 </html>
