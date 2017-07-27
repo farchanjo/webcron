@@ -14,3 +14,5 @@ It's going generate a artifact called webcron.jar, the just start it.
 java -Dfile.encoding=UTF-8 -Xms50m -Xmx200m -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+HeapDumpOnOutOfMemoryError -XX:+DisableExplicitGC -jar webcron.jar
 ```
 You must choose your heap space for your needed.
+
+STILL IN DEVELOPMENT. If you know Java+Spring come to help to improve it!! :)
