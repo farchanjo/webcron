@@ -23,7 +23,7 @@ public class Jobs {
     }
 
     public Page<JobsDTO> listAll(UserDTO client, Integer limit, Integer page) {
-        Page<JobsEntity> jobs = jobsRepository.findAllByUserId(client.getId(), new PageRequest(page, limit));
+        Page<JobsEntity> jobs = jobsRepository.findAllByUserIdOrderByIdDesc(client.getId(), new PageRequest(page, limit));
         return jobs.map(JobsParser::toDTO);
     }
 }

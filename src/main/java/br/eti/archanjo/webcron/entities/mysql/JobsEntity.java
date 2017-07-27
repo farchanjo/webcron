@@ -39,7 +39,7 @@ public class JobsEntity implements Serializable {
     @Column(name = "fixedRate")
     private Integer fixedRate;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private Status status;
 

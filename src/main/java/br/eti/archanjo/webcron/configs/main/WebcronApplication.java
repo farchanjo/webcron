@@ -59,6 +59,7 @@ public class WebcronApplication implements CommandLineRunner {
                     .fixedRate(10)
                     .unit(TimeUnit.DAYS)
                     .async(AsyncType.PERIODIC)
+                    .status(Status.ENABLE)
                     .build();
             jobsEntity.setUser(entity);
             jobsRepository.save(jobsEntity);

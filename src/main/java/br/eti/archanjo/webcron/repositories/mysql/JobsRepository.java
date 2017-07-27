@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 public interface JobsRepository extends CrudRepository<JobsEntity, Long> {
-    Page<JobsEntity> findAllByUserId(Long userId, Pageable page);
+    Page<JobsEntity> findAllByUserIdOrderByIdDesc(Long userId, Pageable page);
 }
