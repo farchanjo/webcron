@@ -19,10 +19,21 @@ public class JobsFacade {
         this.jobs = jobs;
     }
 
+    /**
+     * @param client {@link UserDTO}
+     * @param limit  {@link Integer}
+     * @param page   {@link Integer}
+     * @return {@link Page<JobsDTO>}
+     */
     public Page<JobsDTO> listAll(UserDTO client, Integer limit, Integer page) {
         return jobs.listAll(client, limit, page);
     }
 
+    /**
+     * @param client {@link UserDTO}
+     * @param job    {@link JobsDTO }
+     * @return {@link JobsDTO}
+     */
     public JobsDTO save(UserDTO client, JobsDTO job) {
         return jobs.save(client, job);
     }
