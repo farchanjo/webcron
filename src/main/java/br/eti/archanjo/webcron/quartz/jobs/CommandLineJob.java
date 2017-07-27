@@ -1,8 +1,8 @@
 package br.eti.archanjo.webcron.quartz.jobs;
 
+import br.eti.archanjo.webcron.configs.PropertiesConfig;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import lombok.Getter;
-import org.apache.commons.io.IOUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -11,12 +11,17 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 @Getter
 public class CommandLineJob implements Job {
     private final Logger logger = LoggerFactory.getLogger(CommandLineJob.class);
     private JobsDTO job;
+    private PropertiesConfig.Logging loggingConfig;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -34,15 +39,16 @@ public class CommandLineJob implements Job {
      */
     private void feedJob(JobExecutionContext context) {
         job = (JobsDTO) context.getMergedJobDataMap().get("data");
+        loggingConfig = (PropertiesConfig.Logging) context.getMergedJobDataMap().get("loggingConfig");
     }
 
     private void runCommand() throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder();
         setEnvironments(pb);
+        setOutputs(pb);
         pb.command(getJob().getCommand().split("\\s+"));
         Process process = pb.start();
         process.waitFor();
-        logger.info(IOUtils.toString(process.getInputStream()));
     }
 
     /**
@@ -57,5 +63,19 @@ public class CommandLineJob implements Job {
         } else {
             pb.directory(new File(job.getDirectory()));
         }
+    }
+
+    /*
+     * @param pb {@link ProcessBuilder}
+     */
+    private void setOutputs(ProcessBuilder pb) throws IOException {
+        Path logFolder = Paths.get(getLoggingConfig().getFolder());
+        if (Files.notExists(logFolder, LinkOption.NOFOLLOW_LINKS)) {
+            Files.createDirectories(logFolder);
+            logger.info(String.format("%s folder created", logFolder.toAbsolutePath()));
+        }
+        Path logPath = Paths.get(getLoggingConfig().getFolder(), String.format("%s-%s-output.log", getJob().getId(), getJob().getName()));
+        pb.redirectOutput(logPath.toFile());
+        pb.redirectError(logPath.toFile());
     }
 }

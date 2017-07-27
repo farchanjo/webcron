@@ -43,4 +43,4 @@ webcron:
     limit: 100
     page: 0
   logging:
-    folder: ~/1/log
+    folder: /Users/fabricio/1/log
