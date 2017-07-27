@@ -119,6 +119,7 @@ public class Jobs {
                     if (!CronSequenceGenerator.isValidExpression(job.getCron())) {
                         throw new BadRequestException(String.format("%s is not valid", job.getCron()));
                     }
+
                     schedulers.getTaskRegistrar()
                             .addTriggerTask(new Runnable() {
                                 @Override

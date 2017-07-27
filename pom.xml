@@ -28,6 +28,8 @@
         <commoncodec.version>1.10</commoncodec.version>
         <mysql.version>6.0.3</mysql.version>
         <newrelic.version>3.37.0</newrelic.version>
+        <quartz.version>2.3.0</quartz.version>
+        <angularjs.version>1.6.4</angularjs.version>
     </properties>
 
     <dependencies>
@@ -86,7 +88,20 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator</artifactId>
-            <version>0.32-1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${quartz.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz-jobs</artifactId>
+            <version>${quartz.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
@@ -96,47 +111,47 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>angularjs</artifactId>
-            <version>1.6.4</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-sanitize</artifactId>
-            <version>1.6.4</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-route</artifactId>
-            <version>1.6.4</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-animate</artifactId>
-            <version>1.6.4</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-cookies</artifactId>
-            <version>1.6.4</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-touch</artifactId>
-            <version>1.6.4</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-messages</artifactId>
-            <version>1.6.4</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-resource</artifactId>
-            <version>1.6.4</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-aria</artifactId>
-            <version>1.6.4</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
@@ -172,11 +187,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commonlang.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commoncodec.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

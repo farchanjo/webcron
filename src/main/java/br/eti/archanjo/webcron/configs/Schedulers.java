@@ -22,11 +22,15 @@ public class Schedulers implements SchedulingConfigurer {
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        this.taskRegistrar = taskRegistrar;
         taskRegistrar.setTaskScheduler(taskSchedulerExecutor);
+        this.taskRegistrar = taskRegistrar;
     }
 
     public ScheduledTaskRegistrar getTaskRegistrar() {
         return taskRegistrar;
+    }
+
+    public ThreadPoolTaskScheduler getTaskSchedulerExecutor() {
+        return taskSchedulerExecutor;
     }
 }

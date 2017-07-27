@@ -57,7 +57,7 @@ public class WebcronApplication implements CommandLineRunner {
                 .build();
         entity = userRepository.save(entity);
 
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 3; i++) {
             JobsEntity jobsEntity = JobsEntity.builder()
                     .name("Teste")
                     .fixedRate(10)
