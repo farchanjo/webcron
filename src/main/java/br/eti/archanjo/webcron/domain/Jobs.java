@@ -81,6 +81,7 @@ public class Jobs {
             entity.setUnit(job.getUnit());
             entity.setEnvironments(job.getEnvironments());
             entity.setCommand(job.getCommand());
+            entity.setDirectory(job.getDirectory());
         } else {
             UserEntity userEntity = userRepository.findOne(client.getId());
             entity = JobsParser.toEntity(job);

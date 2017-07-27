@@ -53,6 +53,9 @@ public class JobsEntity implements Serializable {
     @Lob
     private List<Environment> environments;
 
+    @Column(name = "directory")
+    private String directory;
+
     @Column(name = "command", columnDefinition = "TEXT", nullable = false)
     private String command;
 

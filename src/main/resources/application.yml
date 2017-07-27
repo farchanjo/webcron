@@ -3,6 +3,7 @@ logging:
     root: INFO
     br.eti.archanjo: INFO
     org.springframework: INFO
+    br.eti.archanjo.webcron.quartz: DEBUG
 spring:
   profiles:
     active: default
@@ -41,3 +42,5 @@ webcron:
   httplimits:
     limit: 100
     page: 0
+  logging:
+    folder: ~/1/log
