@@ -19,6 +19,7 @@ public class JobsParser {
                 .cron(entity.getCron())
                 .fixedRate(entity.getFixedRate())
                 .unit(entity.getUnit())
+                .command(entity.getCommand())
                 .created(entity.getCreated())
                 .modified(entity.getModified())
                 .build();
@@ -31,6 +32,7 @@ public class JobsParser {
                 .status(dto.getStatus())
                 .unit(dto.getUnit())
                 .environments(dto.getEnvironments())
+                .command(dto.getCommand())
                 .async(dto.getAsync())
                 .fixedRate(dto.getFixedRate())
                 .cron(dto.getCron())

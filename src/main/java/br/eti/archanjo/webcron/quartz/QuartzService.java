@@ -4,8 +4,8 @@ import br.eti.archanjo.webcron.constants.QuartzContants;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.enums.AsyncType;
 import br.eti.archanjo.webcron.exceptions.BadRequestException;
-import br.eti.archanjo.webcron.quartz.listeners.impl.JobListenerImpl;
 import br.eti.archanjo.webcron.quartz.jobs.CommandLineJob;
+import br.eti.archanjo.webcron.quartz.listeners.impl.JobListenerImpl;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
@@ -15,6 +15,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.support.CronSequenceGenerator;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -124,7 +126,7 @@ public class QuartzService {
             case PERIODIC:
                 builder.withIdentity(getTriggerFormat(job), QuartzContants.THREAD_GROUP_PERIODIC);
                 builder.withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInSeconds((int) job.getUnit().convert(job.getFixedRate().longValue(), job.getUnit()))
+                        .withIntervalInMilliseconds(TimeUnit.MILLISECONDS.convert(job.getFixedRate(), job.getUnit()))
                         .repeatForever());
                 break;
         }
@@ -170,7 +172,6 @@ public class QuartzService {
                                             }
                                             break;
                                     }
-                                    logger.info(trigger.getName());
                                 });
                     } catch (SchedulerException e) {
                         logger.warn("QuartzService{checkIfAlreadyRegistered}", e);

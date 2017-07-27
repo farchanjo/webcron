@@ -31,6 +31,7 @@ public class JobsDTO implements Serializable {
     private Status status;
     private List<Environment> environments;
     private TimeUnit unit;
+    private String command;
     private String cron;
     private Date created;
     private Date modified;
@@ -43,7 +44,9 @@ public class JobsDTO implements Serializable {
                 ", async=" + async +
                 ", fixedRate=" + fixedRate +
                 ", status=" + status +
+                ", environments=" + environments +
                 ", unit=" + unit +
+                ", command='" + command + '\'' +
                 ", cron='" + cron + '\'' +
                 ", created=" + created +
                 ", modified=" + modified +
@@ -64,7 +67,9 @@ public class JobsDTO implements Serializable {
                 .append(async, jobsDTO.async)
                 .append(fixedRate, jobsDTO.fixedRate)
                 .append(status, jobsDTO.status)
+                .append(environments, jobsDTO.environments)
                 .append(unit, jobsDTO.unit)
+                .append(command, jobsDTO.command)
                 .append(cron, jobsDTO.cron)
                 .isEquals();
     }
@@ -77,7 +82,9 @@ public class JobsDTO implements Serializable {
                 .append(async)
                 .append(fixedRate)
                 .append(status)
+                .append(environments)
                 .append(unit)
+                .append(command)
                 .append(cron)
                 .toHashCode();
     }

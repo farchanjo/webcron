@@ -46,6 +46,7 @@ angular.module('webCronApp')
             $scope.status = job.status;
             $scope.unit = job.unit;
             $scope.cron = job.cron;
+            $scope.command = job.command;
         }
 
         $scope.okModal = function (form) {
@@ -57,9 +58,10 @@ angular.module('webCronApp')
                     fixedRate: $scope.rate,
                     status: $scope.status,
                     unit: $scope.unit,
-                    cron: $scope.cron
+                    cron: $scope.cron,
+                    command: $scope.command
                 }).then(function () {
-                    $log.debug('Saved jobs: ' + $scope.name)
+                    $log.debug('Saved jobs: ' + $scope.name);
                     $uibModalInstance.dismiss();
                 });
             }
