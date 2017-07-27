@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 
 /*
  * Created by fabricio on 10/07/17.
@@ -26,8 +26,8 @@ public class UserDTO implements Serializable {
     private String email;
     private String username;
     private Status status;
-    private Calendar created;
-    private Calendar modified;
+    private Date created;
+    private Date modified;
     private Roles roles;
     private String password;
 

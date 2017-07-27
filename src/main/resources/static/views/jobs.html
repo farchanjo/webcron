@@ -47,16 +47,16 @@
                         {{job.name}}
                     </td>
                     <td>
-                        {{job.async}}
+                        {{job.async | lowercase}}
                     </td>
                     <td>
                         {{job.fixedRate}}
                     </td>
                     <td>
-                        {{job.status}}
+                        {{job.status | lowercase}}
                     </td>
                     <td>
-                        {{job.unit}}
+                        {{job.unit | lowercase}}
                     </td>
                     <td>
                         {{job.cron}}
@@ -71,7 +71,7 @@
                         <span ng-click="openModel(job)">Edit</span>
                     </td>
                     <td>
-                        <span>Delete</span>
+                        <span ng-click="deleteJob(job)">Delete</span>
                     </td>
                 </tr>
                 </tbody>

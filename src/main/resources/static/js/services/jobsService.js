@@ -35,4 +35,20 @@ angular.module('webCronApp')
             };
             return $http(req);
         };
+
+        /**
+         * @returns Promisse
+         */
+        this.delete = function (job) {
+            var req = {
+                method: 'DELETE',
+                url: '/jobs/delete/' + job.id,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': $cookies.get('XSRF-TOKEN')
+                }
+            };
+            return $http(req);
+        };
     });

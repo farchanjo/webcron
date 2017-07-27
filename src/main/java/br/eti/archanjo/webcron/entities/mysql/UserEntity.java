@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 
 /*
  * Created by fabricio on 10/07/17.
@@ -48,20 +49,20 @@ public class UserEntity implements Serializable {
     private Status status;
 
     @Column(name = "created")
-    private Calendar created;
+    private Date created;
 
     @Column(name = "modified")
-    private Calendar modified;
+    private Date modified;
 
     @PrePersist
     private void prePersist() {
-        created = Calendar.getInstance();
-        modified = Calendar.getInstance();
+        created = new Date();
+        modified = new Date();
     }
 
     @PostUpdate
     private void postUpdated() {
-        modified = Calendar.getInstance();
+        modified = new Date();
     }
 
     @Override

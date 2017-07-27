@@ -28,4 +28,9 @@ public class JobsResource extends GenericResource {
     public JobsDTO saveJob(@RequestBody JobsDTO job) throws Exception {
         return jobsFacade.save(getClient(), job);
     }
+
+    @RequestMapping(path = PathContants.DELETE + "/{id}", method = RequestMethod.DELETE)
+    public Boolean deleteJob(@PathVariable("id") Long id) throws Exception {
+        return jobsFacade.delete(getClient(), id);
+    }
 }

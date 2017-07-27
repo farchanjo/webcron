@@ -37,4 +37,13 @@ public class JobsFacade {
     public JobsDTO save(UserDTO client, JobsDTO job) throws Exception {
         return jobs.save(client, job);
     }
+
+    /**
+     * @param client {@link UserDTO}
+     * @param id     {@link Long}
+     * @return {@link Boolean}
+     */
+    public boolean delete(UserDTO client, Long id) {
+        return jobs.delete(client, id);
+    }
 }

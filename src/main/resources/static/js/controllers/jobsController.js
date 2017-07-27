@@ -1,5 +1,5 @@
 angular.module('webCronApp')
-    .controller('JobsCtrl', function ($uibModal, $scope, $log, JobsService) {
+    .controller('JobsCtrl', function ($uibModal, $location, $scope, $log, JobsService) {
         $log.debug("Jobs Controller has been load.");
         $scope.pageSize = 10;
         $scope.currentPage = 1;
@@ -9,6 +9,8 @@ angular.module('webCronApp')
                 $scope.content = res.data;
                 $scope.totalItems = res.data.totalElements;
                 $scope.smallnumPages = res.data.totalPages;
+            }, function () {
+                $location.path("/login");
             })
         };
 
@@ -44,4 +46,13 @@ angular.module('webCronApp')
             $scope.feedTable($scope.currentPage, $scope.pageSize);
         };
 
+        $scope.deleteJob = function (job) {
+            if (job.id) {
+                JobsService.delete(job)
+                    .then(function () {
+                        $log.debug('Deleted jobs name: ' + job.name);
+                        $scope.feedTable($scope.currentPage, $scope.pageSize);
+                    });
+            }
+        }
     });

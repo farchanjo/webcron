@@ -45,8 +45,9 @@ public class Jobs {
      * @return {@link JobsDTO}
      */
     public JobsDTO save(UserDTO client, JobsDTO job) throws Exception {
-        JobsEntity entity = jobsRepository.findOne(job.getId());
-        if (entity != null) {
+        JobsEntity entity;
+        if (job != null && job.getId() != null) {
+            entity = jobsRepository.findOne(job.getId());
             entity.setName(job.getName());
             entity.setFixedRate(job.getFixedRate());
             entity.setAsync(job.getAsync());
@@ -59,5 +60,21 @@ public class Jobs {
             entity.setUser(userEntity);
         }
         return JobsParser.toDTO(jobsRepository.save(entity));
+    }
+
+    /**
+     * @param client {@link UserDTO}
+     * @param id     {@link Long}
+     * @return {@link Boolean}
+     */
+    public boolean delete(UserDTO client, Long id) {
+        JobsEntity entity = jobsRepository.findOne(id);
+        if (entity != null &&
+                entity.getUser() != null &&
+                entity.getUser().getId().equals(client.getId())) {
+            jobsRepository.delete(id);
+            return true;
+        }
+        return false;
     }
 }

@@ -14,10 +14,10 @@ angular.module('webCronApp')
         }];
 
         $scope.statusSelect = [{
-            label: 'Enabled',
+            label: 'Enable',
             value: 'ENABLE'
         }, {
-            label: 'Disabled',
+            label: 'Disable',
             value: 'DISABLE'
         }];
 
@@ -56,7 +56,7 @@ angular.module('webCronApp')
                     async: $scope.type,
                     fixedRate: $scope.rate,
                     status: $scope.status,
-                    unit: job.unit,
+                    unit: $scope.unit,
                     cron: $scope.cron
                 }).then(function () {
                     $log.debug('Saved jobs: ' + $scope.name)

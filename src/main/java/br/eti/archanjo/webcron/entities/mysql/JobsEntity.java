@@ -55,7 +55,7 @@ public class JobsEntity implements Serializable {
     @Column(name = "modified", nullable = false)
     private Date modified;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH})
     private UserEntity user;
 
     @PrePersist
