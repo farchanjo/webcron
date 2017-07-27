@@ -79,6 +79,7 @@ public class Jobs {
             entity.setCron(job.getCron());
             entity.setStatus(job.getStatus());
             entity.setUnit(job.getUnit());
+            entity.setEnvironments(job.getEnvironments());
         } else {
             UserEntity userEntity = userRepository.findOne(client.getId());
             entity = JobsParser.toEntity(job);
