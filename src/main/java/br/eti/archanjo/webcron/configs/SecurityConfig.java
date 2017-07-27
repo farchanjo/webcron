@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
@@ -40,7 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**", "/js/**", "/css/**", "/views/**", "/*").permitAll()
                 .anyRequest().fullyAuthenticated()
                 .and()
-                .addFilterAfter(csrfHeaderFilter, CsrfFilter.class)
                 .formLogin()
                 .failureHandler(
                         (request, response, exception) -> response.sendError(400, ExceptionConstants.PASSWORD_DOES_NOT_MATCH)
@@ -63,9 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .frameOptions().sameOrigin()
                 .and()
-                .csrf()
-                .ignoringAntMatchers(PathContants.API + PathContants.LOGIN, PathContants.API + PathContants.LOGOUT)
-                .csrfTokenRepository(csrfTokenRepository());
+                .csrf().disable();
     }
 
     @Bean

@@ -3,7 +3,7 @@ package br.eti.archanjo.webcron.quartz;
 import br.eti.archanjo.webcron.constants.QuartzContants;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.exceptions.BadRequestException;
-import br.eti.archanjo.webcron.quartz.jobs.WebJobs;
+import br.eti.archanjo.webcron.quartz.jobs.CommandLineJob;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -86,7 +86,7 @@ public class QuartzService {
      * @return {@link JobDetail}
      */
     private JobDetail getJobsDetail(JobsDTO job) {
-        JobBuilder builder = JobBuilder.newJob(WebJobs.class);
+        JobBuilder builder = JobBuilder.newJob(CommandLineJob.class);
         switch (job.getAsync()) {
             case CRON:
                 builder.withIdentity(getJobsFormat(job), QuartzContants.THREAD_GROUP_CRON);

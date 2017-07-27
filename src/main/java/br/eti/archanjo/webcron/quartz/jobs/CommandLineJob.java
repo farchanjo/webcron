@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class WebJobs implements Job {
-    private final Logger logger = LoggerFactory.getLogger(WebJobs.class);
+public class CommandLineJob implements Job {
+    private final Logger logger = LoggerFactory.getLogger(CommandLineJob.class);
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
