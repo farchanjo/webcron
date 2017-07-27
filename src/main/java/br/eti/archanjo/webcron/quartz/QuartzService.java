@@ -4,6 +4,7 @@ import br.eti.archanjo.webcron.constants.QuartzContants;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.enums.AsyncType;
 import br.eti.archanjo.webcron.exceptions.BadRequestException;
+import br.eti.archanjo.webcron.quartz.impl.JobListenerImpl;
 import br.eti.archanjo.webcron.quartz.jobs.CommandLineJob;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -22,8 +23,13 @@ public class QuartzService {
     private final Scheduler scheduler;
 
     @Autowired
-    public QuartzService(Scheduler scheduler) {
+    public QuartzService(Scheduler scheduler, JobListenerImpl jobListener) {
         this.scheduler = scheduler;
+        try {
+            scheduler.getListenerManager().addJobListener(jobListener);
+        } catch (SchedulerException e) {
+            logger.warn("QuartzService", e);
+        }
     }
 
     /**

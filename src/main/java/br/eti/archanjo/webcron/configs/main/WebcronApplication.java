@@ -1,10 +1,6 @@
 package br.eti.archanjo.webcron.configs.main;
 
-import br.eti.archanjo.webcron.entities.mysql.UserEntity;
-import br.eti.archanjo.webcron.enums.Roles;
-import br.eti.archanjo.webcron.enums.Status;
 import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
-import br.eti.archanjo.webcron.utils.HashUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -36,14 +32,14 @@ public class WebcronApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        UserEntity entity = UserEntity.builder()
-                .status(Status.ENABLE)
-                .name("Fabricio Archanjo Fonseca")
-                .username("farchanjo")
-                .password(HashUtils.sha256("q1w2e3"))
-                .email("farchanjo@gmail.com")
-                .roles(Roles.USER)
-                .build();
-        userRepository.save(entity);
+//        UserEntity entity = UserEntity.builder()
+//                .status(Status.ENABLE)
+//                .name("Fabricio Archanjo Fonseca")
+//                .username("farchanjo")
+//                .password(HashUtils.sha256("q1w2e3"))
+//                .email("farchanjo@gmail.com")
+//                .roles(Roles.USER)
+//                .build();
+//        userRepository.save(entity);
     }
 }
