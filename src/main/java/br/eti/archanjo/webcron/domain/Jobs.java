@@ -4,6 +4,7 @@ import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.dtos.UserDTO;
 import br.eti.archanjo.webcron.entities.mysql.JobsEntity;
 import br.eti.archanjo.webcron.entities.mysql.UserEntity;
+import br.eti.archanjo.webcron.exceptions.BadRequestException;
 import br.eti.archanjo.webcron.quartz.QuartzService;
 import br.eti.archanjo.webcron.repositories.mysql.JobsRepository;
 import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
@@ -32,6 +33,11 @@ public class Jobs {
         this.jobsRepository = jobsRepository;
         this.userRepository = userRepository;
         this.quartzService = quartzService;
+
+        /**
+         * Loading all jobs
+         */
+        loadAllJobsFromBase();
     }
 
     /**
@@ -45,6 +51,17 @@ public class Jobs {
         Page<JobsEntity> jobs = jobsRepository.findAllByUserIdOrderByIdDesc(client.getId(),
                 new PageRequest(page, limit));
         return jobs.map(JobsParser::toDTO);
+    }
+
+    private void loadAllJobsFromBase() {
+        jobsRepository.findAll()
+                .forEach(p -> {
+                    try {
+                        quartzService.saveJob(JobsParser.toDTO(p));
+                    } catch (BadRequestException | SchedulerException e) {
+                        logger.error("Jobs{loadAllJobsFromBase}", e);
+                    }
+                });
     }
 
     /**
