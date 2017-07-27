@@ -131,7 +131,6 @@ public class QuartzService {
                         .repeatForever());
                 break;
         }
-        builder.usingJobData()
         return builder.build();
 
     }
@@ -197,6 +196,10 @@ public class QuartzService {
         return String.format("%s-%s-Job", job.getId(), job.getAsync()).toLowerCase();
     }
 
+    /**
+     * @param job {@link JobsDTO}
+     * @return {@link JobDataMap}
+     */
     private JobDataMap getJobDataMap(JobsDTO job) {
         JobDataMap map = new JobDataMap();
         map.put("data", job);
