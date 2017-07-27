@@ -4,7 +4,7 @@ import br.eti.archanjo.webcron.constants.QuartzContants;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.enums.AsyncType;
 import br.eti.archanjo.webcron.exceptions.BadRequestException;
-import br.eti.archanjo.webcron.quartz.impl.JobListenerImpl;
+import br.eti.archanjo.webcron.quartz.listeners.impl.JobListenerImpl;
 import br.eti.archanjo.webcron.quartz.jobs.CommandLineJob;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
