@@ -9,7 +9,7 @@ angular.module('webCronApp')
             var req = {
                 method: 'GET',
                 url: '/jobs/all',
-                params: {page: page, limit: limit},
+                params: {page: (page - 1), limit: limit},
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',

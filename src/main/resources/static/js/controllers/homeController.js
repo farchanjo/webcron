@@ -1,5 +1,4 @@
 angular.module('webCronApp')
-    .controller('HomeCtrl', function ($scope, $log, CronService) {
-        $scope.payload = null;
+    .controller('HomeCtrl', function ($scope, $log) {
         $log.debug("Home Controller has been load.");
     });

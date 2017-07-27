@@ -52,31 +52,16 @@ public class WebcronApplication implements CommandLineRunner {
                 .roles(Roles.USER)
                 .build();
         entity = userRepository.save(entity);
-        JobsEntity jobsEntity = JobsEntity.builder()
-                .name("Teste")
-                .fixedRate(10)
-                .unit(TimeUnit.DAYS)
-                .async(AsyncType.PERIODIC)
-                .build();
 
-        JobsEntity jobsEntity2 = JobsEntity.builder()
-                .name("Teste 2")
-                .fixedRate(10)
-                .unit(TimeUnit.SECONDS)
-                .async(AsyncType.PERIODIC)
-                .build();
-
-        JobsEntity jobsEntity3 = JobsEntity.builder()
-                .name("Teste 3")
-                .unit(TimeUnit.HOURS)
-                .fixedRate(10)
-                .async(AsyncType.PERIODIC)
-                .build();
-        jobsEntity.setUser(entity);
-        jobsEntity2.setUser(entity);
-        jobsEntity3.setUser(entity);
-        jobsRepository.save(jobsEntity);
-        jobsRepository.save(jobsEntity2);
-        jobsRepository.save(jobsEntity3);
+        for (int i = 0; i < 40; i++) {
+            JobsEntity jobsEntity = JobsEntity.builder()
+                    .name("Teste")
+                    .fixedRate(10)
+                    .unit(TimeUnit.DAYS)
+                    .async(AsyncType.PERIODIC)
+                    .build();
+            jobsEntity.setUser(entity);
+            jobsRepository.save(jobsEntity);
+        }
     }
 }
