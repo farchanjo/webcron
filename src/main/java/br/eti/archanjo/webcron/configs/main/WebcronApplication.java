@@ -1,11 +1,8 @@
 package br.eti.archanjo.webcron.configs.main;
 
-import br.eti.archanjo.webcron.entities.mysql.JobsEntity;
 import br.eti.archanjo.webcron.entities.mysql.UserEntity;
-import br.eti.archanjo.webcron.enums.AsyncType;
 import br.eti.archanjo.webcron.enums.Roles;
 import br.eti.archanjo.webcron.enums.Status;
-import br.eti.archanjo.webcron.repositories.mysql.JobsRepository;
 import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
 import br.eti.archanjo.webcron.utils.HashUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +15,6 @@ import org.springframework.session.data.redis.RedisFlushMode;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.TimeUnit;
-
 @SpringBootApplication(scanBasePackages = "br.eti.archanjo")
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 86400,
         redisFlushMode = RedisFlushMode.IMMEDIATE,
@@ -29,12 +24,10 @@ import java.util.concurrent.TimeUnit;
 @Transactional
 public class WebcronApplication implements CommandLineRunner {
     private final UserRepository userRepository;
-    private final JobsRepository jobsRepository;
 
     @Autowired
-    public WebcronApplication(UserRepository userRepository, JobsRepository jobsRepository) {
+    public WebcronApplication(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.jobsRepository = jobsRepository;
     }
 
     public static void main(String[] args) {
@@ -51,18 +44,6 @@ public class WebcronApplication implements CommandLineRunner {
                 .email("farchanjo@gmail.com")
                 .roles(Roles.USER)
                 .build();
-        entity = userRepository.save(entity);
-
-        for (int i = 0; i < 3; i++) {
-            JobsEntity jobsEntity = JobsEntity.builder()
-                    .name("Teste")
-                    .fixedRate(10)
-                    .unit(TimeUnit.DAYS)
-                    .async(AsyncType.PERIODIC)
-                    .status(Status.ENABLE)
-                    .build();
-            jobsEntity.setUser(entity);
-            jobsRepository.save(jobsEntity);
-        }
+        userRepository.save(entity);
     }
 }
