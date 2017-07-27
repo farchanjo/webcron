@@ -3,6 +3,7 @@ package br.eti.archanjo.webcron.quartz.jobs;
 import br.eti.archanjo.webcron.configs.PropertiesConfig;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import lombok.Getter;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -18,6 +19,7 @@ import java.nio.file.Paths;
 
 
 @Getter
+@DisallowConcurrentExecution
 public class CommandLineJob implements Job {
     private final Logger logger = LoggerFactory.getLogger(CommandLineJob.class);
     private JobsDTO job;
