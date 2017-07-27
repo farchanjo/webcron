@@ -63,8 +63,6 @@ public class JobsDTO implements Serializable {
                 .append(status, jobsDTO.status)
                 .append(unit, jobsDTO.unit)
                 .append(cron, jobsDTO.cron)
-                .append(created, jobsDTO.created)
-                .append(modified, jobsDTO.modified)
                 .isEquals();
     }
 
@@ -78,8 +76,6 @@ public class JobsDTO implements Serializable {
                 .append(status)
                 .append(unit)
                 .append(cron)
-                .append(created)
-                .append(modified)
                 .toHashCode();
     }
 }

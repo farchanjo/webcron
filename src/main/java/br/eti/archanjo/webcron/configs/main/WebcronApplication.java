@@ -14,6 +14,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.session.data.redis.RedisFlushMode;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,8 @@ import java.util.concurrent.TimeUnit;
         redisNamespace = "webcron")
 @EnableJpaRepositories("br.eti.archanjo.webcron.repositories.mysql")
 @EntityScan("br.eti.archanjo.webcron.entities.mysql")
+@EnableScheduling
+@EnableAsync
 @Transactional
 public class WebcronApplication implements CommandLineRunner {
     private final UserRepository userRepository;
