@@ -14,6 +14,6 @@ public class CommandLineJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobsDTO job = (JobsDTO) context.getMergedJobDataMap().get("data");
-        logger.info(job.getName());
+        logger.info(job.getCommand());
     }
 }

@@ -109,7 +109,6 @@ public class QuartzService {
                 builder.withIdentity(getJobsFormat(job), QuartzContants.THREAD_GROUP_PERIODIC);
                 break;
         }
-        builder.setJobData(getJobDataMap(job));
         return builder.build();
     }
 
@@ -123,12 +122,14 @@ public class QuartzService {
             case CRON:
                 builder.withIdentity(getTriggerFormat(job), QuartzContants.THREAD_GROUP_CRON);
                 builder.withSchedule(CronScheduleBuilder.cronSchedule(job.getCron()));
+                builder.usingJobData(getJobDataMap(job));
                 break;
             case PERIODIC:
                 builder.withIdentity(getTriggerFormat(job), QuartzContants.THREAD_GROUP_PERIODIC);
                 builder.withSchedule(SimpleScheduleBuilder.simpleSchedule()
                         .withIntervalInMilliseconds(TimeUnit.MILLISECONDS.convert(job.getFixedRate(), job.getUnit()))
                         .repeatForever());
+                builder.usingJobData(getJobDataMap(job));
                 break;
         }
         return builder.build();
