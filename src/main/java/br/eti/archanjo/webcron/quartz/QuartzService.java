@@ -2,9 +2,13 @@ package br.eti.archanjo.webcron.quartz;
 
 import br.eti.archanjo.webcron.constants.QuartzContants;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
+import br.eti.archanjo.webcron.enums.AsyncType;
 import br.eti.archanjo.webcron.exceptions.BadRequestException;
 import br.eti.archanjo.webcron.quartz.jobs.CommandLineJob;
 import org.quartz.*;
+import org.quartz.impl.matchers.GroupMatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class QuartzService {
+    private static final Logger logger = LoggerFactory.getLogger(QuartzService.class);
     private final Scheduler scheduler;
 
     @Autowired
@@ -25,6 +30,7 @@ public class QuartzService {
      * @param job {@link JobsDTO}
      */
     public void saveJob(JobsDTO job) throws BadRequestException, SchedulerException {
+        checkIfAlreadyRegistered(job);
         switch (job.getAsync()) {
             case PERIODIC:
                 Trigger trigger = scheduler.getTrigger(TriggerKey.triggerKey(getTriggerFormat(job), QuartzContants.THREAD_GROUP_PERIODIC));
@@ -118,6 +124,52 @@ public class QuartzService {
         }
         return builder.build();
 
+    }
+
+    /**
+     * @param jobs {@link JobsDTO}
+     */
+    private void checkIfAlreadyRegistered(JobsDTO jobs) throws SchedulerException {
+        scheduler.getTriggerGroupNames()
+                .forEach(groupName -> {
+                    try {
+                        scheduler.getTriggerKeys(GroupMatcher.groupEquals(groupName))
+                                .parallelStream()
+                                .forEach(trigger -> {
+                                    switch (jobs.getAsync()) {
+                                        case CRON:
+                                            try {
+                                                if (trigger.getName().contains(String.format("%s-%s", jobs.getId(), AsyncType.PERIODIC).toLowerCase())) {
+                                                    deleteJob(JobsDTO.builder()
+                                                            .id(jobs.getId())
+                                                            .name(jobs.getName())
+                                                            .async(AsyncType.PERIODIC)
+                                                            .build());
+                                                }
+                                            } catch (SchedulerException e) {
+                                                logger.warn("QuartzService{checkIfAlreadyRegistered}", e);
+                                            }
+                                            break;
+                                        case PERIODIC:
+                                            try {
+                                                if (trigger.getName().contains(String.format("%s-%s", jobs.getId(), AsyncType.CRON).toLowerCase())) {
+                                                    deleteJob(JobsDTO.builder()
+                                                            .id(jobs.getId())
+                                                            .name(jobs.getName())
+                                                            .async(AsyncType.CRON)
+                                                            .build());
+                                                }
+                                            } catch (SchedulerException e) {
+                                                logger.warn("QuartzService{checkIfAlreadyRegistered}", e);
+                                            }
+                                            break;
+                                    }
+                                    logger.info(trigger.getName());
+                                });
+                    } catch (SchedulerException e) {
+                        logger.warn("QuartzService{checkIfAlreadyRegistered}", e);
+                    }
+                });
     }
 
     /**
