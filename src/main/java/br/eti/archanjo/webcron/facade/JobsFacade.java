@@ -3,6 +3,7 @@ package br.eti.archanjo.webcron.facade;
 import br.eti.archanjo.webcron.domain.Jobs;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.dtos.UserDTO;
+import br.eti.archanjo.webcron.exceptions.NotFoundException;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -36,6 +37,8 @@ public class JobsFacade {
      * @return {@link JobsDTO}
      */
     public JobsDTO save(UserDTO client, JobsDTO job) throws Exception {
+        if (job.getCommand() == null)
+            throw new NotFoundException("Missing commmand to run");
         return jobs.save(client, job);
     }
 

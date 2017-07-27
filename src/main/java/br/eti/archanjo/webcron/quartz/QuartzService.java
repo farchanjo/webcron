@@ -109,6 +109,7 @@ public class QuartzService {
                 builder.withIdentity(getJobsFormat(job), QuartzContants.THREAD_GROUP_PERIODIC);
                 break;
         }
+        builder.setJobData(getJobDataMap(job));
         return builder.build();
     }
 
@@ -130,6 +131,7 @@ public class QuartzService {
                         .repeatForever());
                 break;
         }
+        builder.usingJobData()
         return builder.build();
 
     }
@@ -193,6 +195,12 @@ public class QuartzService {
      */
     private String getJobsFormat(JobsDTO job) {
         return String.format("%s-%s-Job", job.getId(), job.getAsync()).toLowerCase();
+    }
+
+    private JobDataMap getJobDataMap(JobsDTO job) {
+        JobDataMap map = new JobDataMap();
+        map.put("data", job);
+        return map;
     }
 
 }
