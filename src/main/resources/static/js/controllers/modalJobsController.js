@@ -1,5 +1,5 @@
 angular.module('webCronApp')
-    .controller('ModalJobCtrl', function ($scope, $log, $uibModalInstance, job) {
+    .controller('ModalJobCtrl', function ($scope, $log, $uibModalInstance, job, JobsService) {
         $log.debug("Model Jobs Controller has been load.");
 
         $scope.type = 'CRON';
@@ -39,6 +39,7 @@ angular.module('webCronApp')
         }];
 
         if (job) {
+            $scope.id = job.id;
             $scope.name = job.name;
             $scope.type = job.async;
             $scope.rate = job.fixedRate;
@@ -49,8 +50,20 @@ angular.module('webCronApp')
 
         $scope.okModal = function (form) {
             if (form.$valid) {
+                JobsService.save({
+                    id: $scope.id,
+                    name: $scope.name,
+                    async: $scope.type,
+                    fixedRate: $scope.rate,
+                    status: $scope.status,
+                    unit: job.unit,
+                    cron: $scope.cron
+                }).then(function () {
+                    $log.debug('Saved jobs: ' + $scope.name)
+                    $uibModalInstance.dismiss();
+                });
             }
-            $uibModalInstance.dismiss();
+
         };
 
         $scope.cancelModal = function () {

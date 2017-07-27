@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -50,23 +50,23 @@ public class JobsEntity implements Serializable {
     private String cron;
 
     @Column(name = "created", nullable = false)
-    private Calendar created;
+    private Date created;
 
     @Column(name = "modified", nullable = false)
-    private Calendar modified;
+    private Date modified;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private UserEntity user;
 
     @PrePersist
     private void prePersist() {
-        created = Calendar.getInstance();
-        modified = Calendar.getInstance();
+        created = new Date();
+        modified = new Date();
     }
 
-    @PostUpdate
+    @PreUpdate
     private void postUpdated() {
-        modified = Calendar.getInstance();
+        modified = new Date();
     }
 
     @Override

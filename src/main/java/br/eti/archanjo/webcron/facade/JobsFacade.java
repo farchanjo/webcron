@@ -22,4 +22,8 @@ public class JobsFacade {
     public Page<JobsDTO> listAll(UserDTO client, Integer limit, Integer page) {
         return jobs.listAll(client, limit, page);
     }
+
+    public JobsDTO save(UserDTO client, JobsDTO job) {
+        return jobs.save(client, job);
+    }
 }

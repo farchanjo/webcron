@@ -3,7 +3,9 @@ package br.eti.archanjo.webcron.domain;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.dtos.UserDTO;
 import br.eti.archanjo.webcron.entities.mysql.JobsEntity;
+import br.eti.archanjo.webcron.entities.mysql.UserEntity;
 import br.eti.archanjo.webcron.repositories.mysql.JobsRepository;
+import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
 import br.eti.archanjo.webcron.utils.parsers.JobsParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -15,15 +17,47 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class Jobs {
+    private final UserRepository userRepository;
     private final JobsRepository jobsRepository;
 
     @Autowired
-    public Jobs(JobsRepository jobsRepository) {
+    public Jobs(JobsRepository jobsRepository, UserRepository userRepository) {
         this.jobsRepository = jobsRepository;
+        this.userRepository = userRepository;
     }
 
-    public Page<JobsDTO> listAll(UserDTO client, Integer limit, Integer page) {
-        Page<JobsEntity> jobs = jobsRepository.findAllByUserIdOrderByIdDesc(client.getId(), new PageRequest(page, limit));
+    /**
+     * @param client {@link UserDTO}
+     * @param limit  {@link Integer}
+     * @param page   {@link Integer}
+     * @return {@link Page<JobsDTO>}
+     */
+    public Page<JobsDTO> listAll(UserDTO client,
+                                 Integer limit, Integer page) {
+        Page<JobsEntity> jobs = jobsRepository.findAllByUserIdOrderByIdDesc(client.getId(),
+                new PageRequest(page, limit));
         return jobs.map(JobsParser::toDTO);
+    }
+
+    /**
+     * @param client {@link UserDTO}
+     * @param job    {@link JobsDTO}
+     * @return {@link JobsDTO}
+     */
+    public JobsDTO save(UserDTO client, JobsDTO job) {
+        JobsEntity entity = jobsRepository.findOne(job.getId());
+        if (entity != null) {
+            entity.setName(job.getName());
+            entity.setFixedRate(job.getFixedRate());
+            entity.setAsync(job.getAsync());
+            entity.setCron(job.getCron());
+            entity.setStatus(job.getStatus());
+            entity.setUnit(job.getUnit());
+        } else {
+            UserEntity userEntity = userRepository.findOne(client.getId());
+            entity = JobsParser.toEntity(job);
+            entity.setUser(userEntity);
+        }
+        return JobsParser.toDTO(jobsRepository.save(entity));
     }
 }

@@ -18,4 +18,21 @@ angular.module('webCronApp')
             };
             return $http(req);
         };
+
+        /**
+         * @returns Promisse
+         */
+        this.save = function (job) {
+            var req = {
+                method: 'POST',
+                url: '/jobs/create',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': $cookies.get('XSRF-TOKEN')
+                },
+                data: job
+            };
+            return $http(req);
+        };
     });

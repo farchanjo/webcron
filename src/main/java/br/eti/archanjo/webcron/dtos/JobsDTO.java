@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -29,8 +29,8 @@ public class JobsDTO implements Serializable {
     private Status status;
     private TimeUnit unit;
     private String cron;
-    private Calendar created;
-    private Calendar modified;
+    private Date created;
+    private Date modified;
 
     @Override
     public String toString() {
