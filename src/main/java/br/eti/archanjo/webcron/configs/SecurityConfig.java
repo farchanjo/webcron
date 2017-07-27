@@ -2,34 +2,26 @@ package br.eti.archanjo.webcron.configs;
 
 import br.eti.archanjo.webcron.constants.ExceptionConstants;
 import br.eti.archanjo.webcron.constants.PathContants;
-import br.eti.archanjo.webcron.filters.CsrfHeaderFilter;
 import br.eti.archanjo.webcron.filters.CustomAuthenticationEntryPoint;
 import br.eti.archanjo.webcron.providers.SecurityProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SecurityProvider provider;
-    private final CsrfHeaderFilter csrfHeaderFilter;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Autowired
-    public SecurityConfig(SecurityProvider provider, CsrfHeaderFilter csrfHeaderFilter,
+    public SecurityConfig(SecurityProvider provider,
                           CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
         this.provider = provider;
-        this.csrfHeaderFilter = csrfHeaderFilter;
         this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
     }
 
@@ -62,14 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .frameOptions().sameOrigin()
                 .and()
                 .csrf().disable();
-    }
-
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public CsrfTokenRepository csrfTokenRepository() {
-        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-        repository.setHeaderName("X-XSRF-TOKEN");
-        return repository;
     }
 
     @Autowired
