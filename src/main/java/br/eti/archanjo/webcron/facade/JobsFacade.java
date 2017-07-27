@@ -3,6 +3,7 @@ package br.eti.archanjo.webcron.facade;
 import br.eti.archanjo.webcron.domain.Jobs;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.dtos.UserDTO;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -43,7 +44,7 @@ public class JobsFacade {
      * @param id     {@link Long}
      * @return {@link Boolean}
      */
-    public boolean delete(UserDTO client, Long id) {
+    public boolean delete(UserDTO client, Long id) throws SchedulerException {
         return jobs.delete(client, id);
     }
 }
