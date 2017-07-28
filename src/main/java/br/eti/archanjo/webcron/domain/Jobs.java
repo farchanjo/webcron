@@ -9,6 +9,7 @@ import br.eti.archanjo.webcron.quartz.QuartzService;
 import br.eti.archanjo.webcron.repositories.mysql.JobsRepository;
 import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
 import br.eti.archanjo.webcron.utils.parsers.JobsParser;
+import br.eti.archanjo.webcron.utils.parsers.UserParser;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +89,9 @@ public class Jobs {
             entity.setUser(userEntity);
         }
         entity = jobsRepository.save(entity);
-        quartzService.saveJob(JobsParser.toDTO(entity));
+        JobsDTO dto = JobsParser.toDTO(entity);
+        dto.setUser(UserParser.toDTO(entity.getUser()));
+        quartzService.saveJob(dto);
         return JobsParser.toDTO(entity);
     }
 

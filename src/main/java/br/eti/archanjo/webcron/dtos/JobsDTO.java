@@ -33,6 +33,7 @@ public class JobsDTO implements Serializable {
     private TimeUnit unit;
     private String command;
     private String cron;
+    private UserDTO user;
     private String directory;
     private Date created;
     private Date modified;
