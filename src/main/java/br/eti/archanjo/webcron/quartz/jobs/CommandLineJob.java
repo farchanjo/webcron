@@ -1,9 +1,7 @@
 package br.eti.archanjo.webcron.quartz.jobs;
 
 import br.eti.archanjo.webcron.configs.PropertiesConfig;
-import br.eti.archanjo.webcron.constants.QuartzContants;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
-import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
 import lombok.Getter;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
@@ -29,14 +27,14 @@ public class CommandLineJob extends QuartzJobBean {
     private PropertiesConfig.Logging loggingConfig;
 
     @Autowired
-    private UserRepository userRepository;
+    private PropertiesConfig config;
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         feedJob(context);
         logger.debug(String.format("%s job start to run with command: %s", getJob().getName(), getJob().getCommand()));
         try {
-            runCommand();
+            runCommand(context);
         } catch (Exception e) {
             throw new JobExecutionException(e);
         }
@@ -47,16 +45,16 @@ public class CommandLineJob extends QuartzJobBean {
      */
     private void feedJob(JobExecutionContext context) {
         job = (JobsDTO) context.getMergedJobDataMap().get("data");
-        loggingConfig = (PropertiesConfig.Logging) context.getMergedJobDataMap().get("loggingConfig");
     }
 
-    private void runCommand() throws IOException, InterruptedException {
+    private void runCommand(JobExecutionContext context) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder();
         setEnvironments(pb);
-        setOutputs(pb);
+        Path output = setOutputs(pb);
         pb.command(getJob().getCommand().split("\\s+"));
         Process process = pb.start();
         process.waitFor();
+        context.setResult(output);
     }
 
     /**
@@ -76,14 +74,16 @@ public class CommandLineJob extends QuartzJobBean {
     /**
      * @param pb {@link ProcessBuilder}
      */
-    private void setOutputs(ProcessBuilder pb) throws IOException {
-        Path logFolder = Paths.get(getLoggingConfig().getFolder());
+    private Path setOutputs(ProcessBuilder pb) throws IOException {
+        Path logFolder = Paths.get(config.getLogging().getFolder());
         if (Files.notExists(logFolder, LinkOption.NOFOLLOW_LINKS)) {
             Files.createDirectories(logFolder);
             logger.info(String.format("%s folder created", logFolder.toAbsolutePath()));
         }
-        Path logPath = Paths.get(getLoggingConfig().getFolder(), String.format(QuartzContants.FORMAT_LOG, getJob().getId(), getJob().getName()));
-        pb.redirectError(ProcessBuilder.Redirect.appendTo(logPath.toFile()));
-        pb.redirectOutput(ProcessBuilder.Redirect.appendTo(logPath.toFile()));
+
+        Path tmpFile = Files.createTempFile(logFolder, "output.", ".tmp");
+        pb.redirectError(ProcessBuilder.Redirect.appendTo(tmpFile.toFile()));
+        pb.redirectOutput(ProcessBuilder.Redirect.appendTo(tmpFile.toFile()));
+        return tmpFile;
     }
 }

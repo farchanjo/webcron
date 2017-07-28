@@ -1,6 +1,5 @@
 package br.eti.archanjo.webcron.quartz;
 
-import br.eti.archanjo.webcron.configs.PropertiesConfig;
 import br.eti.archanjo.webcron.constants.QuartzContants;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.enums.AsyncType;
@@ -25,17 +24,14 @@ public class QuartzService {
     private static final Logger logger = LoggerFactory.getLogger(QuartzService.class);
     private final Scheduler scheduler;
 
-    private final PropertiesConfig config;
-
     @Autowired
-    public QuartzService(Scheduler scheduler, JobListenerImpl jobListener, PropertiesConfig config) {
+    public QuartzService(Scheduler scheduler, JobListenerImpl jobListener) {
         this.scheduler = scheduler;
         try {
             scheduler.getListenerManager().addJobListener(jobListener);
         } catch (SchedulerException e) {
             logger.warn("QuartzService", e);
         }
-        this.config = config;
     }
 
     /**
@@ -208,7 +204,6 @@ public class QuartzService {
     private JobDataMap getJobDataMap(JobsDTO job) {
         JobDataMap map = new JobDataMap();
         map.put("data", job);
-        map.put("loggingConfig", config.getLogging());
         return map;
     }
 

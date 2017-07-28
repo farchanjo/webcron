@@ -1,10 +1,10 @@
 package br.eti.archanjo.webcron.quartz.listeners.impl;
 
-import br.eti.archanjo.webcron.configs.PropertiesConfig;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.entities.mongo.ExecutionStatusEntity;
 import br.eti.archanjo.webcron.repositories.mongo.ExecutionStatusRepository;
 import lombok.Getter;
+import org.apache.commons.io.FileUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Date;
 
 @Component
@@ -25,7 +27,6 @@ public class JobListenerImpl implements JobListener {
     private final ExecutionStatusRepository executionStatusRepository;
     private static final Logger logger = LoggerFactory.getLogger(JobListenerImpl.class);
     private JobsDTO job;
-    private PropertiesConfig.Logging loggingConfig;
     private final String name = "MainListener";
 
     @Autowired
@@ -49,8 +50,12 @@ public class JobListenerImpl implements JobListener {
 
     @Override
     public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
-        feedJob(context);
-        save(context, jobException);
+        try {
+            feedJob(context);
+            save(context, jobException);
+        } catch (IOException e) {
+            logger.error("JobListenerImpl{jobWasExecuted}", e);
+        }
         logger.debug(String.format("Jobs executed %s", context.getJobDetail().getKey().toString()));
     }
 
@@ -58,7 +63,8 @@ public class JobListenerImpl implements JobListener {
      * @param context      {@link JobExecutionContext}
      * @param jobException {@link JobExecutionException}
      */
-    private void save(JobExecutionContext context, JobExecutionException jobException) {
+    private void save(JobExecutionContext context, JobExecutionException jobException) throws IOException {
+        Path output = (Path) context.getResult();
         ExecutionStatusEntity.ExecutionStatusEntityBuilder builder = ExecutionStatusEntity.builder();
         builder.created(new Date());
         builder.modified(new Date());
@@ -67,6 +73,13 @@ public class JobListenerImpl implements JobListener {
         builder.jobRunTime(context.getJobRunTime());
         builder.prevFireTime(context.getPreviousFireTime());
         builder.scheduledFireTime(context.getScheduledFireTime());
+        if (output != null) {
+            builder.output(FileUtils.readFileToString(output.toFile()));
+            if (output.toFile().delete())
+                logger.debug(String.format("%s file deleted", output.toAbsolutePath()));
+        } else {
+            builder.output("No output");
+        }
         if (jobException != null) {
             builder.errors(true);
             builder.errorMessage(jobException.getMessage());
@@ -80,6 +93,5 @@ public class JobListenerImpl implements JobListener {
      */
     private void feedJob(JobExecutionContext context) {
         job = (JobsDTO) context.getMergedJobDataMap().get("data");
-        loggingConfig = (PropertiesConfig.Logging) context.getMergedJobDataMap().get("loggingConfig");
     }
 }

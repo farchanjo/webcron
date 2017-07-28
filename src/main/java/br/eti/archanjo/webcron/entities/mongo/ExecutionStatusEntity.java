@@ -40,6 +40,8 @@ public class ExecutionStatusEntity implements Serializable {
     private boolean errors = false;
     @Field("errormessage")
     private String errorMessage;
+    @Field("output")
+    private String output;
     private Date created;
     private Date modified;
 }
