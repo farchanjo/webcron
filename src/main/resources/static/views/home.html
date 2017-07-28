@@ -30,10 +30,10 @@
                         Command
                     </th>
                     <th>
-                        Error Message
+                        Command Output
                     </th>
                     <th>
-                        Command Output
+                        Error Message
                     </th>
                 </tr>
                 </thead>
@@ -58,10 +58,10 @@
                         {{result.job.command}}
                     </td>
                     <td>
-                        {{result.errorMessage}}
+                        <span ng-click="openModal(result)"> {{result.output | limitTo:60}} </span>
                     </td>
                     <td>
-                        <span ng-click="openModal(result)"> {{result.output | limitTo:60}} </span>
+                        <span ng-click="openModal(result)"> {{result.errorMessage| limitTo:60}}</span>
                     </td>
                 </tr>
                 </tbody>
@@ -80,8 +80,11 @@
 <script type="text/ng-template" id="modalOutput.html">
 
     <div class="modal-body" id="modal-body">
-        <div class="pre-scrollable" style="white-space: pre-wrap">
+        <div class="pre-scrollable" style="white-space: pre-wrap" ng-hide="job.errors">
             {{job.output}}
+        </div>
+        <div class="pre-scrollable" style="white-space: pre-wrap" ng-hide="!job.errors">
+            {{job.errorMessage}}
         </div>
     </div>
     <div class="modal-footer">
