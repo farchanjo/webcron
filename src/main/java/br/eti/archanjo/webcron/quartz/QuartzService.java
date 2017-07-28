@@ -80,7 +80,12 @@ public class QuartzService {
         switch (job.getStatus()) {
             case ENABLE:
                 if (trigger == null) {
-                    scheduler.scheduleJob(getJobsDetail(job), getTrigger(job));
+                    try {
+                        scheduler.scheduleJob(getJobsDetail(job), getTrigger(job));
+                    } catch (ObjectAlreadyExistsException e) {
+                        trigger = getTrigger(job);
+                        scheduler.rescheduleJob(trigger.getKey(), trigger);
+                    }
                 } else {
                     scheduler.rescheduleJob(trigger.getKey(), getTrigger(job));
                 }
