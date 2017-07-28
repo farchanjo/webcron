@@ -23,6 +23,12 @@ spring:
     username: root
     password: q1w2e3
     driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    mongodb:
+      host: vm.services
+      database: webcron
+      repositories:
+        enabled: true
   jpa:
     hibernate:
       ddl-auto: create-drop

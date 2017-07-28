@@ -28,6 +28,12 @@
                         Cron
                     </th>
                     <th>
+                        Directory
+                    </th>
+                    <th>
+                        Command
+                    </th>
+                    <th>
                         Modified
                     </th>
                     <th>
@@ -60,6 +66,12 @@
                     </td>
                     <td>
                         {{job.cron}}
+                    </td>
+                    <td>
+                        {{job.directory}}
+                    </td>
+                    <td>
+                        {{job.command}}
                     </td>
                     <td>
                         {{job.modified | date:'dd/MM/yyyy - HH:mm:ss'}}

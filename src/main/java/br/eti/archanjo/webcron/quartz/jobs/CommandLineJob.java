@@ -31,8 +31,8 @@ public class CommandLineJob implements Job {
         logger.debug(String.format("%s job start to run with command: %s", getJob().getName(), getJob().getCommand()));
         try {
             runCommand();
-        } catch (IOException | InterruptedException e) {
-            logger.warn("CommandLineJob{execute}", e);
+        } catch (Exception e) {
+            throw new JobExecutionException(e);
         }
     }
 
