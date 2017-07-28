@@ -80,12 +80,7 @@ public class QuartzService {
         switch (job.getStatus()) {
             case ENABLE:
                 if (trigger == null) {
-                    try {
-                        scheduler.scheduleJob(getJobsDetail(job), getTrigger(job));
-                    } catch (ObjectAlreadyExistsException e) {
-                        trigger = getTrigger(job);
-                        scheduler.rescheduleJob(trigger.getKey(), trigger);
-                    }
+                    scheduler.scheduleJob(getJobsDetail(job), getTrigger(job));
                 } else {
                     scheduler.rescheduleJob(trigger.getKey(), getTrigger(job));
                 }
@@ -110,7 +105,6 @@ public class QuartzService {
      */
     private JobDetail getJobsDetail(JobsDTO job) {
         JobBuilder builder = JobBuilder.newJob(CommandLineJob.class);
-        builder.storeDurably();
         switch (job.getAsync()) {
             case CRON:
                 builder.withIdentity(getJobsFormat(job), QuartzContants.THREAD_GROUP_CRON);
