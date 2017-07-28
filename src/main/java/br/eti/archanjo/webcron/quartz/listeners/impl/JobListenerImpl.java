@@ -67,7 +67,6 @@ public class JobListenerImpl implements JobListener {
         Path output = (Path) context.getResult();
         ExecutionStatusEntity.ExecutionStatusEntityBuilder builder = ExecutionStatusEntity.builder();
         builder.created(new Date());
-        builder.modified(new Date());
         builder.nextFireTime(context.getNextFireTime());
         builder.fireTime(context.getFireTime());
         builder.jobRunTime(context.getJobRunTime());

@@ -58,10 +58,10 @@
                         {{result.job.command}}
                     </td>
                     <td>
-                        <span ng-click="openModal(result)"> {{result.output | limitTo:60}} </span>
+                        <span ng-click="openModal(result, 'lg')"> {{result.output | limitTo:60}} </span>
                     </td>
                     <td>
-                        <span ng-click="openModal(result)"> {{result.errorMessage| limitTo:60}}</span>
+                        <span ng-click="openModal(result, 'lg')"> {{result.errorMessage| limitTo:60}}</span>
                     </td>
                 </tr>
                 </tbody>

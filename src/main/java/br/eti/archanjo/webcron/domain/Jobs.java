@@ -131,7 +131,6 @@ public class Jobs {
                 new PageRequest(page, limit));
         return executionStatusEntities.map(source -> ExecutionStatusDTO.builder()
                 .created(source.getCreated())
-                .modified(source.getModified())
                 .errorMessage(source.getErrorMessage())
                 .errors(source.isErrors())
                 .fireTime(source.getFireTime())

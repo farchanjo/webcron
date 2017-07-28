@@ -1,7 +1,7 @@
 angular.module('webCronApp')
     .controller('HomeCtrl', function ($scope, $location, $log, $uibModal, UsersService, JobsService) {
         $log.debug("Home Controller has been load.");
-        $scope.pageSize = 10;
+        $scope.pageSize = 30;
         $scope.currentPage = 1;
 
         UsersService.me().then(function (res) {
