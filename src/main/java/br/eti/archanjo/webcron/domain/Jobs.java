@@ -1,15 +1,17 @@
 package br.eti.archanjo.webcron.domain;
 
+import br.eti.archanjo.webcron.dtos.ExecutionStatusDTO;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.dtos.UserDTO;
+import br.eti.archanjo.webcron.entities.mongo.ExecutionStatusEntity;
 import br.eti.archanjo.webcron.entities.mysql.JobsEntity;
 import br.eti.archanjo.webcron.entities.mysql.UserEntity;
 import br.eti.archanjo.webcron.exceptions.BadRequestException;
 import br.eti.archanjo.webcron.quartz.QuartzService;
+import br.eti.archanjo.webcron.repositories.mongo.ExecutionStatusRepository;
 import br.eti.archanjo.webcron.repositories.mysql.JobsRepository;
 import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
 import br.eti.archanjo.webcron.utils.parsers.JobsParser;
-import br.eti.archanjo.webcron.utils.parsers.UserParser;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +31,11 @@ public class Jobs {
 
     private final QuartzService quartzService;
 
+    private final ExecutionStatusRepository executionStatusRepository;
+
     @Autowired
-    public Jobs(JobsRepository jobsRepository, UserRepository userRepository, QuartzService quartzService) {
+    public Jobs(JobsRepository jobsRepository, UserRepository userRepository, QuartzService quartzService,
+                ExecutionStatusRepository executionStatusRepository) {
         this.jobsRepository = jobsRepository;
         this.userRepository = userRepository;
         this.quartzService = quartzService;
@@ -39,6 +44,7 @@ public class Jobs {
          * Loading all jobs
          */
         loadAllJobsFromBase();
+        this.executionStatusRepository = executionStatusRepository;
     }
 
     /**
@@ -90,7 +96,7 @@ public class Jobs {
         }
         entity = jobsRepository.save(entity);
         JobsDTO dto = JobsParser.toDTO(entity);
-        dto.setUser(UserParser.toDTO(entity.getUser()));
+        dto.setUserId(entity.getId());
         quartzService.saveJob(dto);
         return JobsParser.toDTO(entity);
     }
@@ -110,5 +116,28 @@ public class Jobs {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param client {@link UserDTO}
+     * @param limit  {@link Integer}
+     * @param page   {@link Integer}
+     * @return {@link Page<ExecutionStatusDTO>}
+     */
+    public Page<ExecutionStatusDTO> listResults(UserDTO client, Integer limit, Integer page) {
+        Page<ExecutionStatusEntity> executionStatusEntities = executionStatusRepository.findAllByJobUserId(client.getId(), new PageRequest(page, limit));
+        return executionStatusEntities.map(source -> ExecutionStatusDTO.builder()
+                .created(source.getCreated())
+                .modified(source.getModified())
+                .errorMessage(source.getErrorMessage())
+                .errors(source.isErrors())
+                .fireTime(source.getFireTime())
+                .nextFireTime(source.getNextFireTime())
+                .prevFireTime(source.getPrevFireTime())
+                .scheduledFireTime(source.getScheduledFireTime())
+                .jobRunTime(source.getJobRunTime())
+                .id(source.getId())
+                .job(source.getJob())
+                .build());
     }
 }

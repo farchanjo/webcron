@@ -14,4 +14,5 @@ public class PathContants {
     public static final String DELETE = "/delete";
     public static final String ME = "/me";
     public static final String USERS = "/users";
+    public static final String RESULTS = "/results";
 }

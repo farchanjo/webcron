@@ -1,6 +1,7 @@
 package br.eti.archanjo.webcron.facade;
 
 import br.eti.archanjo.webcron.domain.Jobs;
+import br.eti.archanjo.webcron.dtos.ExecutionStatusDTO;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.dtos.UserDTO;
 import br.eti.archanjo.webcron.exceptions.NotFoundException;
@@ -49,5 +50,15 @@ public class JobsFacade {
      */
     public boolean delete(UserDTO client, Long id) throws SchedulerException {
         return jobs.delete(client, id);
+    }
+
+    /**
+     * @param client {@link UserDTO}
+     * @param limit {@link Integer}
+     * @param page {@link Integer}
+     * @return {@link Page<ExecutionStatusDTO>}
+     */
+    public Page<ExecutionStatusDTO> listResults(UserDTO client, Integer limit, Integer page) {
+        return jobs.listResults(client, limit, page);
     }
 }

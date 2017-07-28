@@ -1,6 +1,7 @@
 package br.eti.archanjo.webcron.api;
 
 import br.eti.archanjo.webcron.constants.PathContants;
+import br.eti.archanjo.webcron.dtos.ExecutionStatusDTO;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.facade.JobsFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,11 @@ public class JobsResource extends GenericResource {
     @RequestMapping(path = PathContants.DELETE + "/{id}", method = RequestMethod.DELETE)
     public Boolean deleteJob(@PathVariable("id") Long id) throws Exception {
         return jobsFacade.delete(getClient(), id);
+    }
+
+    @RequestMapping(path = PathContants.RESULTS, method = RequestMethod.GET)
+    public Page<ExecutionStatusDTO> listExecutionStatus(@RequestParam(value = "limit") Integer limit,
+                                                        @RequestParam(value = "page") Integer page) throws Exception {
+        return jobsFacade.listResults(getClient(), limit, page);
     }
 }

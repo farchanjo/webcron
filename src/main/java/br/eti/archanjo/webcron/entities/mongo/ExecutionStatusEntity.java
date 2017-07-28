@@ -2,9 +2,9 @@ package br.eti.archanjo.webcron.entities.mongo;
 
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -16,6 +16,9 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 @Setter
+@CompoundIndexes({
+        @CompoundIndex(name = "findByUserId", def = "{'job.userId' : 1, created: -1}")
+})
 @Document(collection = "executions")
 public class ExecutionStatusEntity implements Serializable {
     private static final long serialVersionUID = 5211167467012607987L;
@@ -37,8 +40,6 @@ public class ExecutionStatusEntity implements Serializable {
     private boolean errors = false;
     @Field("errormessage")
     private String errorMessage;
-    @CreatedDate
     private Date created;
-    @LastModifiedDate
     private Date modified;
 }

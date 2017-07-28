@@ -3,7 +3,7 @@ logging:
     root: INFO
     br.eti.archanjo: INFO
     org.springframework: INFO
-    br.eti.archanjo.webcron.quartz: DEBUG
+    br.eti.archanjo.webcron.quartz: INFO
 spring:
   profiles:
     active: default
