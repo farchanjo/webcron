@@ -65,7 +65,7 @@
 </div>
 <div class="row">
     <div class="col-md-4">
-        <ul uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"
-            class="pagination-sm"></ul>
+        <ul uib-pagination max-size="10" boundary-links="true" total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"
+            class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
     </div>
 </div>
