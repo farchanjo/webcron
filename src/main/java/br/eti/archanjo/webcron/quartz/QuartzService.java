@@ -105,6 +105,7 @@ public class QuartzService {
      */
     private JobDetail getJobsDetail(JobsDTO job) {
         JobBuilder builder = JobBuilder.newJob(CommandLineJob.class);
+        builder.storeDurably();
         switch (job.getAsync()) {
             case CRON:
                 builder.withIdentity(getJobsFormat(job), QuartzContants.THREAD_GROUP_CRON);

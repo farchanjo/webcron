@@ -54,5 +54,10 @@ angular.module('webCronApp')
                         $scope.feedTable($scope.currentPage, $scope.pageSize);
                     });
             }
-        }
+        };
+
+        // JobsService.readLog(1)
+        //     .then(function (res) {
+        //         $log.info(res.data);
+        //     })
     });

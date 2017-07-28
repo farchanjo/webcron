@@ -20,6 +20,7 @@ public class JobsParser {
                 .fixedRate(entity.getFixedRate())
                 .unit(entity.getUnit())
                 .directory(entity.getDirectory())
+                .userId(entity.getUser().getId())
                 .command(entity.getCommand())
                 .created(entity.getCreated())
                 .modified(entity.getModified())

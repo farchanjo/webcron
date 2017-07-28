@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class JobsFacade {
@@ -54,11 +56,15 @@ public class JobsFacade {
 
     /**
      * @param client {@link UserDTO}
-     * @param limit {@link Integer}
-     * @param page {@link Integer}
+     * @param limit  {@link Integer}
+     * @param page   {@link Integer}
      * @return {@link Page<ExecutionStatusDTO>}
      */
     public Page<ExecutionStatusDTO> listResults(UserDTO client, Integer limit, Integer page) {
         return jobs.listResults(client, limit, page);
+    }
+
+    public String readLogFile(UserDTO client, Long jobId) throws NotFoundException, IOException {
+        return jobs.readLogFile(client, jobId);
     }
 }

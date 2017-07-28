@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ExecutionStatusRepository extends MongoRepository<ExecutionStatusEntity, String> {
-    Page<ExecutionStatusEntity> findAllByJobUserId(Long id, Pageable page);
+    Page<ExecutionStatusEntity> findAllByJobUserIdOrderByCreatedDesc(Long id, Pageable page);
 }

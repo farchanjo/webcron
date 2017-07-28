@@ -20,7 +20,7 @@ public class ExecutionStatusDTO implements Serializable {
     private Date fireTime;
     private Date prevFireTime;
     private Date nextFireTime;
-    private Integer jobRunTime;
+    private Long jobRunTime;
     private Date scheduledFireTime;
     private JobsDTO job;
     private boolean errors;

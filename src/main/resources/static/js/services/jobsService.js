@@ -39,6 +39,26 @@ angular.module('webCronApp')
         /**
          * @returns Promisse
          */
+        this.readLog = function (jobId) {
+            var req = {
+                method: 'GET',
+                url: '/jobs/log',
+                params: {jobId: jobId},
+                transformResponse: [function (data) {
+                    return data;
+                }],
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': $cookies.get('XSRF-TOKEN')
+                }
+            };
+            return $http(req);
+        };
+
+        /**
+         * @returns Promisse
+         */
         this.save = function (job) {
             var req = {
                 method: 'POST',

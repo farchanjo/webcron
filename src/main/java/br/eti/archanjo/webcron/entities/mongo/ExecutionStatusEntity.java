@@ -31,7 +31,7 @@ public class ExecutionStatusEntity implements Serializable {
     @Field("nextFireTime")
     private Date nextFireTime;
     @Field("jobRunTime")
-    private Integer jobRunTime;
+    private Long jobRunTime;
     @Field("scheduledFireTime")
     private Date scheduledFireTime;
     @Field("job")

@@ -64,6 +64,7 @@ public class JobListenerImpl implements JobListener {
         builder.modified(new Date());
         builder.nextFireTime(context.getNextFireTime());
         builder.fireTime(context.getFireTime());
+        builder.jobRunTime(context.getJobRunTime());
         builder.prevFireTime(context.getPreviousFireTime());
         builder.scheduledFireTime(context.getScheduledFireTime());
         if (jobException != null) {

@@ -1,14 +1,17 @@
 package br.eti.archanjo.webcron.quartz.jobs;
 
 import br.eti.archanjo.webcron.configs.PropertiesConfig;
+import br.eti.archanjo.webcron.constants.QuartzContants;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
+import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
 import lombok.Getter;
 import org.quartz.DisallowConcurrentExecution;
-import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,13 +23,16 @@ import java.nio.file.Paths;
 
 @Getter
 @DisallowConcurrentExecution
-public class CommandLineJob implements Job {
+public class CommandLineJob extends QuartzJobBean {
     private final Logger logger = LoggerFactory.getLogger(CommandLineJob.class);
     private JobsDTO job;
     private PropertiesConfig.Logging loggingConfig;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         feedJob(context);
         logger.debug(String.format("%s job start to run with command: %s", getJob().getName(), getJob().getCommand()));
         try {
@@ -67,7 +73,7 @@ public class CommandLineJob implements Job {
         }
     }
 
-    /*
+    /**
      * @param pb {@link ProcessBuilder}
      */
     private void setOutputs(ProcessBuilder pb) throws IOException {
@@ -76,7 +82,7 @@ public class CommandLineJob implements Job {
             Files.createDirectories(logFolder);
             logger.info(String.format("%s folder created", logFolder.toAbsolutePath()));
         }
-        Path logPath = Paths.get(getLoggingConfig().getFolder(), String.format("%s-%s-output.log", getJob().getId(), getJob().getName()));
+        Path logPath = Paths.get(getLoggingConfig().getFolder(), String.format(QuartzContants.FORMAT_LOG, getJob().getId(), getJob().getName()));
         pb.redirectError(ProcessBuilder.Redirect.appendTo(logPath.toFile()));
         pb.redirectOutput(ProcessBuilder.Redirect.appendTo(logPath.toFile()));
     }
