@@ -22,6 +22,23 @@ angular.module('webCronApp')
         /**
          * @returns Promisse
          */
+        this.listJobsResult = function (page, limit) {
+            var req = {
+                method: 'GET',
+                url: '/jobs/results',
+                params: {page: (page - 1), limit: limit},
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': $cookies.get('XSRF-TOKEN')
+                }
+            };
+            return $http(req);
+        };
+
+        /**
+         * @returns Promisse
+         */
         this.save = function (job) {
             var req = {
                 method: 'POST',

@@ -10,7 +10,7 @@ angular.module('webCronApp')
                     .then(function (res) {
                         if (res) {
                             $log.debug("login done");
-                            $location.path("#!/");
+                            $location.path("/");
                         }
                     }, function (err) {
                         $log.debug(err);
