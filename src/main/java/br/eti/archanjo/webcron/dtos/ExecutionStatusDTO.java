@@ -26,6 +26,7 @@ public class ExecutionStatusDTO implements Serializable {
     private boolean errors;
     private String errorMessage;
     private Date created;
+    private String output;
     private Date modified;
 
     @Override

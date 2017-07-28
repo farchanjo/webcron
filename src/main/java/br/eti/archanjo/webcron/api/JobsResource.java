@@ -40,9 +40,4 @@ public class JobsResource extends GenericResource {
                                                         @RequestParam(value = "page") Integer page) throws Exception {
         return jobsFacade.listResults(getClient(), limit, page);
     }
-
-    @RequestMapping(path = PathContants.LOG, method = RequestMethod.GET)
-    public String readLogFile(@RequestParam("jobId") Long jobId) throws Exception {
-        return jobsFacade.readLogFile(getClient(), jobId);
-    }
 }

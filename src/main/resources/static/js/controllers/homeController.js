@@ -1,5 +1,5 @@
 angular.module('webCronApp')
-    .controller('HomeCtrl', function ($scope, $location, $log, UsersService, JobsService) {
+    .controller('HomeCtrl', function ($scope, $location, $log, $uibModal, UsersService, JobsService) {
         $log.debug("Home Controller has been load.");
         $scope.pageSize = 10;
         $scope.currentPage = 1;
@@ -23,4 +23,24 @@ angular.module('webCronApp')
         $scope.pageChanged = function () {
             $scope.feedTable($scope.currentPage, $scope.pageSize);
         };
+
+        $scope.openModal = function (job, size, parentSelector) {
+            var parentElem = parentSelector ?
+                angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+            $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'modalOutput.html',
+                controller: 'ModalOutputCtrl',
+                controllerAs: 'modalOutput',
+                size: size,
+                appendTo: parentElem,
+                resolve: {
+                    job: function () {
+                        return job;
+                    }
+                }
+            });
+        }
     });
