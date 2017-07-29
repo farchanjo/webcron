@@ -1,8 +1,10 @@
 angular.module('webCronApp')
-    .controller('HomeCtrl', function ($scope, $location, $log, $uibModal, UsersService, JobsService) {
+    .controller('HomeCtrl', function ($scope, $location, $log, $uibModal, $interval, UsersService, JobsService) {
         $log.debug("Home Controller has been load.");
         $scope.pageSize = 15;
         $scope.currentPage = 1;
+        $scope.reloadTime = 5;
+        var autoReloadPromise;
 
         UsersService.me().then(function (res) {
             $scope.me = res.data;
@@ -65,5 +67,21 @@ angular.module('webCronApp')
             else {
                 return 'success';
             }
-        }
+        };
+
+        $scope.startAuto = function (checked) {
+            if (checked) {
+                autoReloadPromise = $interval(function () {
+                    if ($scope.searched !== undefined && $scope.searched.length > 0) {
+                        $scope.feedTable($scope.currentPage, $scope.pageSize, $scope.searched);
+                    }
+                    else {
+                        $scope.feedTable($scope.currentPage, $scope.pageSize);
+                    }
+                }, $scope.reloadTime * 1000);
+            }
+            else {
+                $interval.cancel(autoReloadPromise);
+            }
+        };
     });

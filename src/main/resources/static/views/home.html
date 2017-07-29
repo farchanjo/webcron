@@ -10,6 +10,15 @@
                    placeholder="search by name">
         </div>
     </div>
+    <div class="col-md-2">
+        <div class="form-inline" style="margin: 17px 0;">
+            <label>
+                Reload <input ng-model="reloadTime" type="number" class="form-control input-sm"
+                              placeholder="Auto Reload" style="width: 50px">
+                <input type="checkbox" class="checkbox checkbox-inline" ng-init="checked=false" ng-model="checked" ng-click="startAuto(checked)">
+            </label>
+        </div>
+    </div>
 </div>
 <div class="row" style="margin-top: 10px; font-size: 12px;">
     <div class="col-md-12 nofocus">
@@ -96,8 +105,8 @@
     <div class="modal-body" id="modal-body">
         <div style="margin: 20px">
             <div class="row">
-                <h5>Job's Name: <span style="color: #1a91ff">{{job.job.name}}</span></h5>
-                <h5>Fire Time: <span style="color: #1a91ff">{{job.fireTime | date:'dd/MM/yyyy - HH:mm:ss'}}</span></h5>
+                <h5>Name: <span style="color: #5c5e63">{{job.job.name}}</span></h5>
+                <h5>Fire Time: <span style="color: #5c5e63">{{job.fireTime | date:'dd/MM/yyyy - HH:mm:ss'}}</span></h5>
                 <h5 ng-hide="job.job.directory === ''">Directory: <span
                         style="color: #1a91ff">{{job.job.directory}}</span>
                 </h5>
