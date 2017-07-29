@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class JobsDTO implements Serializable {
     private static final long serialVersionUID = -7517693919191046339L;
     private Long id;
+    @TextIndexed
     private String name;
     private AsyncType async;
     private Integer fixedRate;

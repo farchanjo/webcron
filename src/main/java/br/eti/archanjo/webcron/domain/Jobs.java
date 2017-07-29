@@ -21,6 +21,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -124,11 +125,18 @@ public class Jobs {
      * @param client {@link UserDTO}
      * @param limit  {@link Integer}
      * @param page   {@link Integer}
+     * @param name
      * @return {@link Page<ExecutionStatusDTO>}
      */
-    public Page<ExecutionStatusDTO> listResults(UserDTO client, Integer limit, Integer page) {
-        Page<ExecutionStatusEntity> executionStatusEntities = executionStatusRepository.findAllByJobUserIdOrderByCreatedDesc(client.getId(),
-                new PageRequest(page, limit));
+    public Page<ExecutionStatusDTO> listResults(UserDTO client, Integer limit, Integer page, String name) {
+        Page<ExecutionStatusEntity> executionStatusEntities;
+        if (name == null) {
+            executionStatusEntities = executionStatusRepository.findAllByJobUserIdOrderByCreatedDesc(client.getId(),
+                    new PageRequest(page, limit));
+        } else {
+            TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(name);
+            executionStatusEntities = executionStatusRepository.findBy(criteria, new PageRequest(page, limit));
+        }
         return executionStatusEntities.map(source -> ExecutionStatusDTO.builder()
                 .created(source.getCreated())
                 .errorMessage(source.getErrorMessage())
@@ -136,6 +144,7 @@ public class Jobs {
                 .fireTime(source.getFireTime())
                 .nextFireTime(source.getNextFireTime())
                 .output(source.getOutput())
+                .exitCode(source.getExitCode())
                 .prevFireTime(source.getPrevFireTime())
                 .scheduledFireTime(source.getScheduledFireTime())
                 .jobRunTime(source.getJobRunTime())

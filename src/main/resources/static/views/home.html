@@ -1,18 +1,27 @@
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <h2>
             Jobs Results and Next Fires.
         </h2>
     </div>
+    <div class="col-md-2">
+        <div class="form-group" style="margin: 17px 0;">
+            <input ng-model="searched" ng-change="search()" class="form-control input-medium"
+                   placeholder="search by name">
+        </div>
+    </div>
 </div>
-<div class="row" style="margin-top: 10px">
-    <div class="col-md-10">
+<div class="row" style="margin-top: 10px; font-size: 12px;">
+    <div class="col-md-12 nofocus">
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>
                         Job's Name
+                    </th>
+                    <th>
+                        Run Times
                     </th>
                     <th>
                         Fire Time
@@ -38,9 +47,14 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="result in content.content" ng-class="result.errors ? 'danger' : 'success'">
+                <tr ng-repeat="result in content.content"
+                    ng-class="isDanger(result)"
+                    ng-click="openModal(result, 'lg')">
                     <td>
-                        {{result.job.name}}
+                        {{result.job.name | limitTo:40}}
+                    </td>
+                    <td>
+                        {{result.jobRunTime}}
                     </td>
                     <td>
                         {{result.fireTime | date:'dd/MM/yyyy - HH:mm:ss'}}
@@ -55,13 +69,13 @@
                         {{result.scheduledFireTime | date:'dd/MM/yyyy - HH:mm:ss'}}
                     </td>
                     <td>
-                        {{result.job.command}}
+                        {{result.job.command | limitTo:40}}
                     </td>
                     <td>
-                        <span ng-click="openModal(result, 'lg')"> {{result.output | limitTo:60}} </span>
+                        {{result.output | limitTo:40}}
                     </td>
                     <td>
-                        <span ng-click="openModal(result, 'lg')"> {{result.errorMessage| limitTo:60}}</span>
+                        {{result.errorMessage| limitTo:40}}
                     </td>
                 </tr>
                 </tbody>
@@ -80,11 +94,29 @@
 <script type="text/ng-template" id="modalOutput.html">
 
     <div class="modal-body" id="modal-body">
-        <div class="pre-scrollable" style="white-space: pre-wrap" ng-hide="job.errors">
-            {{job.output}}
-        </div>
-        <div class="pre-scrollable" style="white-space: pre-wrap" ng-hide="!job.errors">
-            {{job.errorMessage}}
+        <div style="margin: 20px">
+            <div class="row">
+                <h5>Job's Name: <span style="color: #1a91ff">{{job.job.name}}</span></h5>
+                <h5>Fire Time: <span style="color: #1a91ff">{{job.fireTime | date:'dd/MM/yyyy - HH:mm:ss'}}</span></h5>
+                <h5 ng-hide="job.job.directory === ''">Directory: <span
+                        style="color: #1a91ff">{{job.job.directory}}</span>
+                </h5>
+                <h5 ng-hide="job.job.command === ''">Command: <span
+                        style="color: blue">{{job.job.command}}</span>
+                </h5>
+            </div>
+            <div class="row">
+                <div class="pre-scrollable"
+                     style="white-space: pre-line; overflow: scroll; border: 2px solid #5c5e63; padding: 5px;"
+                     ng-hide="job.errors">
+                    {{job.output}}
+                </div>
+                <div class="pre-scrollable"
+                     style="white-space: pre-line; overflow: scroll; border: 2px solid #5c5e63; padding: 5px;"
+                     ng-hide="!job.errors">
+                    {{job.errorMessage}}
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

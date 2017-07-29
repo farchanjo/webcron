@@ -37,7 +37,8 @@ public class JobsResource extends GenericResource {
 
     @RequestMapping(path = PathContants.RESULTS, method = RequestMethod.GET)
     public Page<ExecutionStatusDTO> listExecutionStatus(@RequestParam(value = "limit") Integer limit,
-                                                        @RequestParam(value = "page") Integer page) throws Exception {
-        return jobsFacade.listResults(getClient(), limit, page);
+                                                        @RequestParam(value = "page") Integer page,
+                                                        @RequestParam(value = "name", required = false) String name) throws Exception {
+        return jobsFacade.listResults(getClient(), limit, page, name);
     }
 }

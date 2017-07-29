@@ -14,6 +14,9 @@ body {
     padding-right: 15px;
 }
 
+.nofocus:focus {
+    outline: none;
+}
 /* Custom page header */
 .header {
     border-bottom: 1px solid #e5e5e5;

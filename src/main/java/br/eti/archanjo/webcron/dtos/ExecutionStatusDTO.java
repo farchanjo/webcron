@@ -24,6 +24,7 @@ public class ExecutionStatusDTO implements Serializable {
     private Date scheduledFireTime;
     private JobsDTO job;
     private boolean errors;
+    private int exitCode;
     private String errorMessage;
     private Date created;
     private String output;

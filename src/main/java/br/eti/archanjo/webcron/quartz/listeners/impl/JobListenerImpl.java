@@ -2,6 +2,7 @@ package br.eti.archanjo.webcron.quartz.listeners.impl;
 
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.entities.mongo.ExecutionStatusEntity;
+import br.eti.archanjo.webcron.pojo.JobResult;
 import br.eti.archanjo.webcron.repositories.mongo.ExecutionStatusRepository;
 import lombok.Getter;
 import org.apache.commons.io.FileUtils;
@@ -17,7 +18,6 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Date;
 
 @Component
@@ -64,18 +64,19 @@ public class JobListenerImpl implements JobListener {
      * @param jobException {@link JobExecutionException}
      */
     private void save(JobExecutionContext context, JobExecutionException jobException) throws IOException {
-        Path output = (Path) context.getResult();
+        JobResult jobResult = (JobResult) context.getResult();
         ExecutionStatusEntity.ExecutionStatusEntityBuilder builder = ExecutionStatusEntity.builder();
         builder.created(new Date());
         builder.nextFireTime(context.getNextFireTime());
         builder.fireTime(context.getFireTime());
         builder.jobRunTime(context.getJobRunTime());
+        builder.exitCode(jobResult.getExitValue());
         builder.prevFireTime(context.getPreviousFireTime());
         builder.scheduledFireTime(context.getScheduledFireTime());
-        if (output != null) {
-            builder.output(FileUtils.readFileToString(output.toFile()));
-            if (output.toFile().delete())
-                logger.debug(String.format("%s file deleted", output.toAbsolutePath()));
+        if (jobResult != null && jobResult.getTmpFile() != null) {
+            builder.output(FileUtils.readFileToString(jobResult.getTmpFile().toFile()));
+            if (jobResult.getTmpFile().toFile().delete())
+                logger.debug(String.format("%s file deleted", jobResult.getTmpFile().toAbsolutePath()));
         } else {
             builder.output("No output");
         }

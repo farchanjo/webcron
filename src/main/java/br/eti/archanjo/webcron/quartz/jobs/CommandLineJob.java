@@ -2,6 +2,7 @@ package br.eti.archanjo.webcron.quartz.jobs;
 
 import br.eti.archanjo.webcron.configs.PropertiesConfig;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
+import br.eti.archanjo.webcron.pojo.JobResult;
 import lombok.Getter;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
@@ -53,8 +54,8 @@ public class CommandLineJob extends QuartzJobBean {
         Path output = setOutputs(pb);
         pb.command(getJob().getCommand().split("\\s+"));
         Process process = pb.start();
-        process.waitFor();
-        context.setResult(output);
+        int exitCode = process.waitFor();
+        context.setResult(JobResult.builder().exitValue(exitCode).tmpFile(output).build());
     }
 
     /**

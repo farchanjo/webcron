@@ -1,7 +1,7 @@
 angular.module('webCronApp')
     .controller('HomeCtrl', function ($scope, $location, $log, $uibModal, UsersService, JobsService) {
         $log.debug("Home Controller has been load.");
-        $scope.pageSize = 30;
+        $scope.pageSize = 15;
         $scope.currentPage = 1;
 
         UsersService.me().then(function (res) {
@@ -10,8 +10,8 @@ angular.module('webCronApp')
             $location.path('/login');
         });
 
-        $scope.feedTable = function (page, limit) {
-            JobsService.listJobsResult(page, limit).then(function (res) {
+        $scope.feedTable = function (page, limit, jobName) {
+            JobsService.listJobsResult(page, limit, jobName).then(function (res) {
                 $scope.content = res.data;
                 $scope.totalItems = res.data.totalElements;
                 $scope.smallnumPages = res.data.totalPages;
@@ -21,7 +21,12 @@ angular.module('webCronApp')
         $scope.feedTable($scope.currentPage, $scope.pageSize);
 
         $scope.pageChanged = function () {
-            $scope.feedTable($scope.currentPage, $scope.pageSize);
+            if ($scope.searched !== undefined && $scope.searched.length > 0) {
+                $scope.feedTable($scope.currentPage, $scope.pageSize, $scope.searched);
+            }
+            else {
+                $scope.feedTable($scope.currentPage, $scope.pageSize);
+            }
         };
 
         $scope.openModal = function (job, size, parentSelector) {
@@ -42,5 +47,23 @@ angular.module('webCronApp')
                     }
                 }
             });
+        };
+
+        $scope.search = function () {
+            if ($scope.searched !== undefined && $scope.searched.length > 0) {
+                $scope.feedTable($scope.currentPage, $scope.pageSize, $scope.searched);
+            }
+            else {
+                $scope.feedTable($scope.currentPage, $scope.pageSize);
+            }
+        };
+
+        $scope.isDanger = function (result) {
+            if (result.errors || result.exitCode > 0) {
+                return 'danger';
+            }
+            else {
+                return 'success';
+            }
         }
     });
