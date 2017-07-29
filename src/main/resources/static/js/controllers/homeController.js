@@ -84,4 +84,8 @@ angular.module('webCronApp')
                 $interval.cancel(autoReloadPromise);
             }
         };
+
+        $scope.$on("$destroy", function () {
+            $interval.cancel(autoReloadPromise);
+        });
     });
