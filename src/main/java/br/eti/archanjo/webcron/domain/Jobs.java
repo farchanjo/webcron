@@ -58,8 +58,7 @@ public class Jobs {
      */
     public Page<JobsDTO> listAll(UserDTO client,
                                  Integer limit, Integer page) throws Exception {
-        Page<JobsEntity> jobs = jobsRepository.findAllByUserIdOrderByIdDesc(client.getId(),
-                new PageRequest(page, limit));
+        Page<JobsEntity> jobs = jobsRepository.findAllByOrderByIdDesc(new PageRequest(page, limit));
         return jobs.map(JobsParser::toDTO);
     }
 
@@ -131,8 +130,7 @@ public class Jobs {
     public Page<ExecutionStatusDTO> listResults(UserDTO client, Integer limit, Integer page, String name) {
         Page<ExecutionStatusEntity> executionStatusEntities;
         if (name == null) {
-            executionStatusEntities = executionStatusRepository.findAllByJobUserIdOrderByCreatedDesc(client.getId(),
-                    new PageRequest(page, limit));
+            executionStatusEntities = executionStatusRepository.findAllByOrderByCreatedDesc(new PageRequest(page, limit));
         } else {
             TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(name);
             executionStatusEntities = executionStatusRepository.findBy(criteria, new PageRequest(page, limit));

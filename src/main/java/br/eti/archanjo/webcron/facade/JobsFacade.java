@@ -4,6 +4,8 @@ import br.eti.archanjo.webcron.domain.Jobs;
 import br.eti.archanjo.webcron.dtos.ExecutionStatusDTO;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.dtos.UserDTO;
+import br.eti.archanjo.webcron.enums.Roles;
+import br.eti.archanjo.webcron.exceptions.NotAuthorizedException;
 import br.eti.archanjo.webcron.exceptions.NotFoundException;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,8 @@ public class JobsFacade {
      * @return {@link JobsDTO}
      */
     public JobsDTO save(UserDTO client, JobsDTO job) throws Exception {
+        if (!client.getRoles().equals(Roles.ADMIN))
+            throw new NotAuthorizedException("Only admin can save jobs");
         if (job.getCommand() == null)
             throw new NotFoundException("Missing commmand to run");
         return jobs.save(client, job);

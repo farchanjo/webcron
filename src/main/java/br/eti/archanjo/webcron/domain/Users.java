@@ -9,6 +9,8 @@ import br.eti.archanjo.webcron.utils.parsers.UserParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -35,21 +37,56 @@ public class Users {
      * @return {@link UserDTO}
      */
     public UserDTO save(UserDTO user) throws NotFoundException {
-        UserEntity entity = userRepository.findOne(user.getId());
-        if (entity == null)
-            throw new NotFoundException("User not found");
-        
-        if (user.getName() != null && !user.getName().isEmpty())
-            entity.setName(user.getName());
+        UserEntity entity;
+        if (user.getId() == null) {
+            entity = UserEntity.builder()
+                    .name(user.getName())
+                    .email(user.getEmail())
+                    .status(user.getStatus())
+                    .roles(user.getRoles())
+                    .password(HashUtils.sha256(user.getPassword()))
+                    .username(user.getUsername())
+                    .build();
+        } else {
+            entity = userRepository.findOne(user.getId());
+            if (user.getName() != null && !user.getName().isEmpty())
+                entity.setName(user.getName());
 
-        if (user.getPassword() != null && !user.getPassword().isEmpty())
-            entity.setPassword(HashUtils.sha256(user.getPassword()));
+            if (user.getPassword() != null && !user.getPassword().isEmpty())
+                entity.setPassword(HashUtils.sha256(user.getPassword()));
 
-        if (user.getEmail() != null && !user.getEmail().isEmpty())
-            entity.setEmail(user.getEmail());
+            if (user.getEmail() != null && !user.getEmail().isEmpty())
+                entity.setEmail(user.getEmail());
 
-        if (user.getUsername() != null && !user.getUsername().isEmpty())
-            entity.setUsername(user.getUsername());
+            if (user.getUsername() != null && !user.getUsername().isEmpty())
+                entity.setUsername(user.getUsername());
+
+            if (user.getStatus() != null)
+                entity.setStatus(user.getStatus());
+
+            if (user.getRoles() != null)
+                entity.setRoles(user.getRoles());
+        }
         return UserParser.toDTO(userRepository.save(entity));
+
+    }
+
+    /**
+     * @param limit {@link Integer}
+     * @param page  {@link Integer}
+     * @return {@link Page<UserDTO>}
+     */
+    public Page<UserDTO> listUsers(Integer limit, Integer page) {
+        Page<UserEntity> usersPage = userRepository.findAll(new PageRequest(page, limit));
+        return usersPage.map(source -> UserDTO.builder()
+                .id(source.getId())
+                .name(source.getName())
+                .username(source.getUsername())
+                .email(source.getEmail())
+                .roles(source.getRoles())
+                .status(source.getStatus())
+                .created(source.getCreated())
+                .modified(source.getModified())
+                .build());
     }
 }

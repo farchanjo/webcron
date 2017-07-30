@@ -16,6 +16,9 @@ angular.module('webCronApp')
             return $http(req);
         };
 
+        /**
+         * @returns Promisse
+         */
         this.save = function (user) {
             var req = {
                 method: 'POST',
@@ -28,5 +31,22 @@ angular.module('webCronApp')
                 data: user
             };
             return $http(req);
-        }
+        };
+
+        /**
+         * @returns Promisse
+         */
+        this.listUsers = function (limit, page) {
+            var req = {
+                method: 'GET',
+                url: '/users',
+                params: {page: (page - 1), limit: limit},
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': $cookies.get('XSRF-TOKEN')
+                }
+            };
+            return $http(req);
+        };
     });

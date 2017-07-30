@@ -9,5 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface JobsRepository extends CrudRepository<JobsEntity, Long> {
     Page<JobsEntity> findAllByUserIdOrderByIdDesc(Long userId, Pageable page);
 
+    Page<JobsEntity> findAllByOrderByIdDesc(Pageable page);
+
     JobsEntity findByIdAndStatus(Long id, Status status);
 }

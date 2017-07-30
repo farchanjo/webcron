@@ -35,3 +35,128 @@
         </form>
     </div>
 </div>
+<div class="row" style="margin-top: 30px">
+    <div class="col-md-2">
+        <button class="btn btn-info" ng-click="openModal()">New User</button>
+    </div>
+</div>
+<div class="row" style="margin-top: 10px; font-size: 12px;">
+    <div class="col-md-8">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>
+                        NAME
+                    </th>
+                    <th>
+                        USERNAME
+                    </th>
+                    <th>
+                        EMAIL
+                    </th>
+                    <th>
+                        ROLE
+                    </th>
+                    <th>
+                        STATUS
+                    </th>
+                    <th>
+                        CREATED
+                    </th>
+                    <th>
+                        MODIFIED
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="user in users" ng-click="openModal(user)">
+                    <td>
+                        {{user.name}}
+                    </td>
+                    <td>
+                        {{user.username}}
+                    </td>
+                    <td>
+                        {{user.email}}
+                    </td>
+                    <td>
+                        {{user.roles | lowercase}}
+                    </td>
+                    <td>
+                        {{user.status | lowercase}}
+                    </td>
+                    <td>
+                        {{user.created | date:'dd/MM/yyyy - HH:mm:ss'}}
+                    </td>
+                    <td>
+                        {{user.modified | date:'dd/MM/yyyy - HH:mm:ss'}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <ul uib-pagination max-size="10" boundary-links="true" total-items="totalItems" ng-model="currentPage"
+            ng-change="pageChanged()"
+            class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+            last-text="&raquo;"></ul>
+    </div>
+</div>
+<script type="text/ng-template" id="modalUser.html">
+    <form class="form-horizontal" name="userForm">
+        <div class="modal-header">
+            <h3 ng-hide="user" class="modal-title">User Create</h3>
+            <h3 ng-hide="!user" class="modal-title">User Change</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <div class="form-group">
+                <label for="inputModalName" class="col-sm-2 control-label">Name</label>
+                <div class="col-sm-10">
+                    <input class="form-control" autocomplete="off" id="inputModalName" ng-model="user.name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputModalUsername" class="col-sm-2 control-label">Username</label>
+                <div class="col-sm-10">
+                    <input class="form-control" autocomplete="off" id="inputModalUsername" ng-model="user.username">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputModalEmail" class="col-sm-2 control-label">Email</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="email" autocomplete="off" id="inputModalEmail" ng-model="user.email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputModalRole" class="col-sm-2 control-label">Roles</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="inputModalRole"
+                            ng-options="roleS.value as roleS.label for roleS in rolesSelect"
+                            ng-model="roles"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputModalStatus" class="col-sm-2 control-label">Status</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="inputModalStatus"
+                            ng-options="statusS.value as statusS.label for statusS in statusSelect"
+                            ng-model="status"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label  for="inputModalPassword" class="col-sm-2 control-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" autocomplete="off" class="form-control" id="inputModalPassword" ng-model="user.password">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="saveUser(userForm)">Save</button>
+            <button class="btn btn-primary" type="button" ng-click="closeModal()">Close</button>
+        </div>
+    </form>
+</script>
