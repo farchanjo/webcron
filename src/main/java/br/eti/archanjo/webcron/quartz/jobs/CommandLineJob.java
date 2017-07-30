@@ -53,9 +53,14 @@ public class CommandLineJob extends QuartzJobBean {
         setEnvironments(pb);
         Path output = setOutputs(pb);
         pb.command(getJob().getCommand().split("\\s+"));
-        Process process = pb.start();
-        int exitCode = process.waitFor();
-        context.setResult(JobResult.builder().exitValue(exitCode).tmpFile(output).build());
+        try {
+            Process process = pb.start();
+            int exitCode = process.waitFor();
+            context.setResult(JobResult.builder().exitValue(exitCode).tmpFile(output).build());
+        } catch (Exception e) {
+            output.toFile().deleteOnExit();
+            throw e;
+        }
     }
 
     /**
