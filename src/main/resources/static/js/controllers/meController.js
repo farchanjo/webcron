@@ -19,6 +19,22 @@ angular.module('webCronApp')
         };
 
         $scope.saveUser = function (form) {
+            if (form.$valid) {
+                var user = {
+                    name: $scope.me.name,
+                    id: $scope.me.id,
+                    username: $scope.me.username,
+                    email: $scope.me.email,
+                    password: $scope.me.password
+                };
 
+                UsersService.save(user)
+                    .then(function (res) {
+                        $scope.me = res.data;
+                        ShareService.prepForBroadcast("userSaved");
+                    }, function () {
+                        $location.path('/loginPage');
+                    });
+            }
         };
     });

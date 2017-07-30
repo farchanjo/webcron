@@ -25,6 +25,9 @@ angular.module('webCronApp')
                     case 'logindone':
                         $scope.loadme();
                         break;
+                    case 'userSaved':
+                        $scope.loadme();
+                        break;
                 }
             }
         });

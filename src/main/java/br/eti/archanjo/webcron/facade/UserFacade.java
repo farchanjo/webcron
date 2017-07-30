@@ -2,6 +2,7 @@ package br.eti.archanjo.webcron.facade;
 
 import br.eti.archanjo.webcron.domain.Users;
 import br.eti.archanjo.webcron.dtos.UserDTO;
+import br.eti.archanjo.webcron.exceptions.NotAuthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -24,5 +25,17 @@ public class UserFacade {
      */
     public UserDTO me(UserDTO client) throws Exception {
         return users.me(client);
+    }
+
+    /**
+     * @param client {@link UserDTO}
+     * @param user   {@link UserDTO}
+     * @return {@link UserDTO}
+     */
+    public UserDTO save(UserDTO client, UserDTO user) throws Exception {
+        if (!client.getId().equals(user.getId())) {
+            throw new NotAuthorizedException("You cannot perform this action");
+        }
+        return users.save(user);
     }
 }

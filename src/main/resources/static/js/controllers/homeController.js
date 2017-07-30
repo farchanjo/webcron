@@ -17,6 +17,8 @@ angular.module('webCronApp')
                 $scope.content = res.data;
                 $scope.totalItems = res.data.totalElements;
                 $scope.smallnumPages = res.data.totalPages;
+            }, function () {
+                $log.debug("not allowed");
             });
         };
 
