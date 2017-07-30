@@ -10,7 +10,7 @@ LimitNOFILE=infinity
 StandardOutput=syslog
 StandardError=syslog
 KillSignal=SIGTERM
-ExecStart=/usr/bin/java -Dfile.encoding=UTF-8 -Xms50m -Xmx400m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:G1HeapRegionSize=20m -XX:InitiatingHeapOccupancyPercent=75 -XX:+ParallelRefProcEnabled -XX:+AggressiveOpts -XX:+OptimizeStringConcat -XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=production -jar /opt/daemons/cron/webcron.jar
+ExecStart=/usr/bin/java -Dfile.encoding=UTF-8 -Xms50m -Xmx400m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:G1HeapRegionSize=20m -XX:InitiatingHeapOccupancyPercent=75 -XX:+ParallelRefProcEnabled -XX:+AggressiveOpts -XX:+OptimizeStringConcat -XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=production -jar webcron.jar --spring.config.location=file:config/prd.yml
 Restart=always
 SyslogIdentifier=webcron
 
