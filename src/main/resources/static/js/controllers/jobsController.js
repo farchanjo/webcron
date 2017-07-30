@@ -10,7 +10,7 @@ angular.module('webCronApp')
                 $scope.totalItems = res.data.totalElements;
                 $scope.smallnumPages = res.data.totalPages;
             }, function () {
-                $location.path("/login");
+                $location.path("/loginPage");
             })
         };
 

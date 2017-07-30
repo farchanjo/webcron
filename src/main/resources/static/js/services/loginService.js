@@ -8,7 +8,7 @@ angular.module('webCronApp')
         this.doLogin = function (username, password) {
             var req = {
                 method: 'POST',
-                url: '/api/login',
+                url: '/login',
                 data: $.param({emailorusername: username, password: password}),
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -23,7 +23,7 @@ angular.module('webCronApp')
         this.doLogout = function () {
             var req = {
                 method: 'GET',
-                url: '/api/logout',
+                url: '/logout',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'

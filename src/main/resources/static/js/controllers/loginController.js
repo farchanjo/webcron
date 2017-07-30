@@ -1,5 +1,5 @@
 angular.module('webCronApp')
-    .controller('LoginCtrl', function ($scope, $location, $log, LoginService) {
+    .controller('LoginCtrl', function ($scope, $location, $log, LoginService, ShareService) {
         $scope.username = null;
         $scope.password = null;
 
@@ -11,6 +11,7 @@ angular.module('webCronApp')
                         if (res) {
                             $log.debug("login done");
                             $location.path("/");
+                            ShareService.prepForBroadcast("logindone");
                         }
                     }, function (err) {
                         $log.debug(err);

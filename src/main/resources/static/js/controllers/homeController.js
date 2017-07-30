@@ -9,7 +9,7 @@ angular.module('webCronApp')
         UsersService.me().then(function (res) {
             $scope.me = res.data;
         }, function () {
-            $location.path('/login');
+            $location.path('/loginPage');
         });
 
         $scope.feedTable = function (page, limit, jobName) {

@@ -38,9 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(
                         (request, response, authentication) -> response.sendError(200, "logged")
                 )
-                .loginPage(PathContants.API + PathContants.LOGIN).passwordParameter("password").usernameParameter("emailorusername").permitAll()
+                .loginPage(PathContants.LOGIN).passwordParameter("password").usernameParameter("emailorusername").permitAll()
                 .and()
-                .logout().logoutUrl(PathContants.API + PathContants.LOGOUT).permitAll()
+                .logout().logoutUrl(PathContants.LOGOUT).permitAll()
                 .logoutSuccessHandler(
                         (request, response, authentication) -> response.sendError(200, "logout ok")
                 )
