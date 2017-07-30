@@ -1,0 +1,18 @@
+[Unit]
+Description=WEB CRON Service
+After=network.target
+
+[Service]
+Type=simple
+Nice=15
+WorkingDirectory=/opt/daemons/cron
+LimitNOFILE=infinity
+StandardOutput=syslog
+StandardError=syslog
+KillSignal=SIGTERM
+ExecStart=/usr/bin/java -Dfile.encoding=UTF-8 -Xms50m -Xmx400m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:G1HeapRegionSize=20m -XX:InitiatingHeapOccupancyPercent=75 -XX:+ParallelRefProcEnabled -XX:+AggressiveOpts -XX:+OptimizeStringConcat -XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=production -jar /opt/daemons/cron/webcron.jar
+Restart=always
+SyslogIdentifier=webcron
+
+[Install]
+WantedBy=multi-user.target
