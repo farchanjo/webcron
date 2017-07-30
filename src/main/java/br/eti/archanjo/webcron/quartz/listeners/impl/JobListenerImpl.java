@@ -70,15 +70,16 @@ public class JobListenerImpl implements JobListener {
         builder.nextFireTime(context.getNextFireTime());
         builder.fireTime(context.getFireTime());
         builder.jobRunTime(context.getJobRunTime());
-        builder.exitCode(jobResult.getExitValue());
         builder.prevFireTime(context.getPreviousFireTime());
         builder.scheduledFireTime(context.getScheduledFireTime());
         if (jobResult != null && jobResult.getTmpFile() != null) {
             builder.output(FileUtils.readFileToString(jobResult.getTmpFile().toFile()));
+            builder.exitCode(jobResult.getExitValue());
             if (jobResult.getTmpFile().toFile().delete())
                 logger.debug(String.format("%s file deleted", jobResult.getTmpFile().toAbsolutePath()));
         } else {
             builder.output("No output");
+            builder.exitCode(-1);
         }
         if (jobException != null) {
             builder.errors(true);
