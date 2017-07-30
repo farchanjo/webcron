@@ -38,11 +38,13 @@ public class UserFacade {
     public UserDTO save(UserDTO client, UserDTO user) throws Exception {
         if (user == null)
             throw new BadRequestException("Missing data");
-        if (client.getId().equals(user.getId()) ||
-                !client.getRoles().equals(Roles.ADMIN)) {
-            throw new NotAuthorizedException("You cannot perform this action, you must be admin");
+        if (client.getId().equals(user.getId())) {
+            return users.save(user);
+        } else {
+            if (!client.getRoles().equals(Roles.ADMIN))
+                throw new NotAuthorizedException("You cannot perform this action, you must be admin");
+            return users.save(user);
         }
-        return users.save(user);
     }
 
     /**
