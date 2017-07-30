@@ -20,7 +20,6 @@ public class User {
     }
 
     public UserEntity authenticate(String username, String password) {
-        return userRepository.findByUsernameOrEmailAndPasswordAndStatus(username, username,
-                HashUtils.sha256(password), Status.ENABLE);
+        return userRepository.findByUsernameAndPasswordAndStatus(username, HashUtils.sha256(password), Status.ENABLE);
     }
 }
