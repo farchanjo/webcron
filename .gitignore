@@ -23,4 +23,6 @@ dist/
 nbdist/
 .nb-gradle/
 .idea/
+.configs
 .configs/
+/configs/
