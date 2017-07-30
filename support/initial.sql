@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS `webcrons` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `webcrons`;
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS = @@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
@@ -38,7 +35,7 @@ CREATE TABLE `jobs` (
   CONSTRAINT `FKra3g6pshf0p0hv5aisuh3weg8` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
+  DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,7 +69,8 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
+  AUTO_INCREMENT = 2
+  DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -82,6 +80,8 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users`
   DISABLE KEYS */;
+INSERT INTO `users` VALUES (1, '2017-07-30 14:21:03', 'admin@admin.com', '2017-07-30 14:21:03', 'Admin',
+                            '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1, 0, 'admin');
 /*!40000 ALTER TABLE `users`
   ENABLE KEYS */;
 UNLOCK TABLES;
@@ -94,3 +94,5 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-07-30 14:21:32
