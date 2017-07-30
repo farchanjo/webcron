@@ -5,10 +5,11 @@ angular.module('webCronApp')
             $scope.user = user;
             $scope.roles = user.roles;
             $scope.status = user.status;
+            $scope.user.password = null;
         } else {
             $scope.roles = 'ADMIN';
             $scope.status = 'ENABLE';
-            $scope.user = {};
+            $scope.user = {password: null};
         }
         $scope.statusSelect = [{
             label: 'Enable',
