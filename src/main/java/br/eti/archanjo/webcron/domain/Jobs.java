@@ -61,7 +61,7 @@ public class Jobs {
         return jobs.map(JobsParser::toDTO);
     }
 
-    public void loadAllJobsFromBase() {
+    private void loadAllJobsFromBase() {
         jobsRepository.findAll()
                 .forEach(p -> {
                     try {
