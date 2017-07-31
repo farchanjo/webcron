@@ -79,7 +79,13 @@ public class CommandLineJob extends QuartzJobBean {
     private void setEnvironments(ProcessBuilder pb) {
         if (getJob().getEnvironments() != null)
             getJob().getEnvironments().forEach(p -> pb.environment().put(p.getKey(), p.getValue()));
-        System.getenv().forEach((k, v) -> pb.environment().put(k, v));
+
+        System.getenv().forEach((k, v) -> {
+            if (!pb.environment().containsKey(k)) {
+                pb.environment().put(k, v);
+            }
+        });
+        
         if (job.getDirectory() == null || job.getDirectory().isEmpty()) {
             pb.directory(new File(System.getProperty("user.home")));
         } else {
