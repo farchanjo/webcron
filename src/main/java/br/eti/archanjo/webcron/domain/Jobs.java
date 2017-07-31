@@ -133,7 +133,7 @@ public class Jobs {
             executionStatusEntities = executionStatusRepository.findAllByOrderByCreatedDesc(new PageRequest(page, limit));
         } else {
             TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(name);
-            executionStatusEntities = executionStatusRepository.findBy(criteria, new PageRequest(page, limit));
+            executionStatusEntities = executionStatusRepository.findByOrderByCreatedDesc(criteria, new PageRequest(page, limit));
         }
         return executionStatusEntities.map(source -> ExecutionStatusDTO.builder()
                 .created(source.getCreated())
