@@ -5,6 +5,7 @@ import br.eti.archanjo.webcron.dtos.ExecutionStatusDTO;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.dtos.UserDTO;
 import br.eti.archanjo.webcron.enums.Roles;
+import br.eti.archanjo.webcron.exceptions.BadRequestException;
 import br.eti.archanjo.webcron.exceptions.NotAuthorizedException;
 import br.eti.archanjo.webcron.exceptions.NotFoundException;
 import org.quartz.SchedulerException;
@@ -44,6 +45,10 @@ public class JobsFacade {
             throw new NotAuthorizedException("Only admin can save jobs");
         if (job.getCommand() == null)
             throw new NotFoundException("Missing commmand to run");
+
+        if (job.getEnvironments().stream().anyMatch(p -> p.getKey() == null || p.getValue() == null))
+            throw new BadRequestException("None value from envs cannot be null");
+        
         return jobs.save(client, job);
     }
 

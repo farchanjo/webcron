@@ -48,11 +48,19 @@ angular.module('webCronApp')
             $scope.cron = job.cron;
             $scope.command = job.command;
             $scope.directory = job.directory;
+            if (job.environments !== undefined &&
+                job.environments.length > 0) {
+                $scope.environments = [];
+                for (var i = 0; i < job.environments.length; i++) {
+                    var env = job.environments[i];
+                    $scope.environments.push(env['key'] + '=' + env['value']);
+                }
+            }
         }
 
         $scope.okModal = function (form) {
             if (form.$valid) {
-                JobsService.save({
+                var job = {
                     id: $scope.id,
                     name: $scope.name,
                     async: $scope.type,
@@ -62,7 +70,22 @@ angular.module('webCronApp')
                     cron: $scope.cron,
                     command: $scope.command,
                     directory: $scope.directory
-                }).then(function () {
+                };
+                if ($scope.environments !== undefined) {
+                    if ($scope.environments.length > 0) {
+                        for (var i = 0; i < $scope.environments.length; i++) {
+                            var env = $scope.environments[i];
+                            var envArr = env['text'].split('=');
+                            if (job.environments === undefined) {
+                                job.environments = [{key: envArr[0], value: envArr[1]}]
+                            }
+                            else {
+                                job.environments.push({key: envArr[0], value: envArr[1]});
+                            }
+                        }
+                    }
+                }
+                JobsService.save(job).then(function () {
                     $log.debug('Saved jobs: ' + $scope.name);
                     $uibModalInstance.dismiss();
                 });

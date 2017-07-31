@@ -5,22 +5,27 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Builder
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 @Setter
-public class Environment implements Serializable {
+public class EnvironmentDTO implements Serializable {
     private static final long serialVersionUID = 339174635727478627L;
-    private String name;
+    private String key;
     private String value;
+    private Date created;
+    private Date modified;
 
     @Override
     public String toString() {
-        return "Environment{" +
-                "name='" + name + '\'' +
+        return "EnvironmentDTO{" +
+                "key='" + key + '\'' +
                 ", value='" + value + '\'' +
+                ", created=" + created +
+                ", modified=" + modified +
                 '}';
     }
 
@@ -30,19 +35,23 @@ public class Environment implements Serializable {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        Environment that = (Environment) o;
+        EnvironmentDTO that = (EnvironmentDTO) o;
 
         return new EqualsBuilder()
-                .append(name, that.name)
+                .append(key, that.key)
                 .append(value, that.value)
+                .append(created, that.created)
+                .append(modified, that.modified)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(name)
+                .append(key)
                 .append(value)
+                .append(created)
+                .append(modified)
                 .toHashCode();
     }
 }

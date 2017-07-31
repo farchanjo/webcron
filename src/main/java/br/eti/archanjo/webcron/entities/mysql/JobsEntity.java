@@ -2,7 +2,6 @@ package br.eti.archanjo.webcron.entities.mysql;
 
 import br.eti.archanjo.webcron.enums.AsyncType;
 import br.eti.archanjo.webcron.enums.Status;
-import br.eti.archanjo.webcron.pojo.Environment;
 import lombok.*;
 
 import javax.persistence.*;
@@ -49,9 +48,8 @@ public class JobsEntity implements Serializable {
     @Column(name = "cron")
     private String cron;
 
-    @Column(name = "envs")
-    @Lob
-    private List<Environment> environments;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<EnvironmentEntity> environments;
 
     @Column(name = "directory")
     private String directory;

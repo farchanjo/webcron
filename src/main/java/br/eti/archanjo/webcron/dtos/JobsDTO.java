@@ -2,7 +2,7 @@ package br.eti.archanjo.webcron.dtos;
 
 import br.eti.archanjo.webcron.enums.AsyncType;
 import br.eti.archanjo.webcron.enums.Status;
-import br.eti.archanjo.webcron.pojo.Environment;
+import br.eti.archanjo.webcron.pojo.EnvironmentDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -31,7 +31,7 @@ public class JobsDTO implements Serializable {
     private AsyncType async;
     private Integer fixedRate;
     private Status status;
-    private List<Environment> environments;
+    private List<EnvironmentDTO> environments;
     private TimeUnit unit;
     private String command;
     private String cron;

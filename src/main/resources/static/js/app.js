@@ -18,7 +18,8 @@ angular
         'ngRoute',
         'ngSanitize',
         'ngStomp',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'ngTagsInput'
     ])
     .config(function ($routeProvider) {
         $routeProvider
