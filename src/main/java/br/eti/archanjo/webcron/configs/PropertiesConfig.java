@@ -17,6 +17,7 @@ public class PropertiesConfig {
     private S3 s3;
     private String applicationUrl;
     private Logging logging;
+    private Shell shell;
 
     @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -33,6 +34,14 @@ public class PropertiesConfig {
     @Setter
     public static class Logging {
         private String folder;
+    }
+
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
+    @NoArgsConstructor(access = AccessLevel.PUBLIC)
+    @Getter
+    @Setter
+    public static class Shell {
+        private String bin;
     }
 
     @AllArgsConstructor(access = AccessLevel.PUBLIC)

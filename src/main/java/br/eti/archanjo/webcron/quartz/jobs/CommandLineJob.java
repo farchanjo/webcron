@@ -67,7 +67,7 @@ public class CommandLineJob extends QuartzJobBean {
 
     private List<String> getCommand(String command) {
         List<String> commandList = new ArrayList<>();
-        commandList.add("/bin/bash");
+        commandList.add(config.getShell().getBin());
         commandList.add("-c");
         commandList.add(command);
         return commandList;

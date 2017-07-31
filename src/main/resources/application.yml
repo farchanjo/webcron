@@ -50,3 +50,5 @@ webcron:
     page: 0
   logging:
     folder: /Users/fabricio/1/log
+  shell:
+    bin: /bin/bash
