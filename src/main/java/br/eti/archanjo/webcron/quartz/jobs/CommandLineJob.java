@@ -18,6 +18,8 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -52,7 +54,7 @@ public class CommandLineJob extends QuartzJobBean {
         ProcessBuilder pb = new ProcessBuilder();
         setEnvironments(pb);
         Path output = setOutputs(pb);
-        pb.command(getJob().getCommand().split("\\s+"));
+        pb.command(getCommand(getJob().getCommand()));
         try {
             Process process = pb.start();
             int exitCode = process.waitFor();
@@ -61,6 +63,14 @@ public class CommandLineJob extends QuartzJobBean {
             output.toFile().delete();
             throw e;
         }
+    }
+
+    private List<String> getCommand(String command) {
+        List<String> commandList = new ArrayList<>();
+        commandList.add("/bin/bash");
+        commandList.add("-c");
+        commandList.add(command);
+        return commandList;
     }
 
     /**
