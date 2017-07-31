@@ -46,9 +46,10 @@ public class JobsFacade {
         if (job.getCommand() == null)
             throw new NotFoundException("Missing commmand to run");
 
-        if (job.getEnvironments().stream().anyMatch(p -> p.getKey() == null || p.getValue() == null))
+        if (job.getEnvironments() != null && job.getEnvironments()
+                .stream().anyMatch(p -> p.getKey() == null || p.getValue() == null))
             throw new BadRequestException("None value from envs cannot be null");
-        
+
         return jobs.save(client, job);
     }
 

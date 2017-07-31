@@ -48,7 +48,7 @@ public class JobsEntity implements Serializable {
     @Column(name = "cron")
     private String cron;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<EnvironmentEntity> environments;
 
     @Column(name = "directory")

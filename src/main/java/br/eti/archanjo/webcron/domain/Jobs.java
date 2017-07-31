@@ -1,6 +1,5 @@
 package br.eti.archanjo.webcron.domain;
 
-import br.eti.archanjo.webcron.configs.PropertiesConfig;
 import br.eti.archanjo.webcron.dtos.ExecutionStatusDTO;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.dtos.UserDTO;
@@ -11,7 +10,6 @@ import br.eti.archanjo.webcron.entities.mysql.UserEntity;
 import br.eti.archanjo.webcron.exceptions.BadRequestException;
 import br.eti.archanjo.webcron.quartz.QuartzService;
 import br.eti.archanjo.webcron.repositories.mongo.ExecutionStatusRepository;
-import br.eti.archanjo.webcron.repositories.mysql.EnvironmentRepository;
 import br.eti.archanjo.webcron.repositories.mysql.JobsRepository;
 import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
 import br.eti.archanjo.webcron.utils.parsers.JobsParser;
@@ -26,7 +24,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -37,25 +34,19 @@ public class Jobs {
     private final JobsRepository jobsRepository;
     private final QuartzService quartzService;
     private final ExecutionStatusRepository executionStatusRepository;
-    private final PropertiesConfig config;
-
-    private final EnvironmentRepository environmentRepository;
 
     @Autowired
     public Jobs(JobsRepository jobsRepository, UserRepository userRepository, QuartzService quartzService,
-                ExecutionStatusRepository executionStatusRepository, PropertiesConfig config,
-                EnvironmentRepository environmentRepository) {
+                ExecutionStatusRepository executionStatusRepository) {
         this.jobsRepository = jobsRepository;
         this.userRepository = userRepository;
         this.quartzService = quartzService;
+        this.executionStatusRepository = executionStatusRepository;
 
         /**
          * Loading all jobs
          */
         loadAllJobsFromBase();
-        this.executionStatusRepository = executionStatusRepository;
-        this.config = config;
-        this.environmentRepository = environmentRepository;
     }
 
     /**
@@ -70,7 +61,7 @@ public class Jobs {
         return jobs.map(JobsParser::toDTO);
     }
 
-    private void loadAllJobsFromBase() {
+    public void loadAllJobsFromBase() {
         jobsRepository.findAll()
                 .forEach(p -> {
                     try {
@@ -96,16 +87,13 @@ public class Jobs {
             entity.setCron(job.getCron());
             entity.setStatus(job.getStatus());
             entity.setUnit(job.getUnit());
-            if (job.getEnvironments() != null) {
-                List<EnvironmentEntity> environmentEntities = job.getEnvironments()
-                        .stream()
-                        .map(p -> EnvironmentEntity.builder()
-                                .key(p.getKey())
-                                .value(p.getValue())
-                                .build())
-                        .collect(Collectors.toList());
-                entity.setEnvironments(environmentEntities);
-            }
+            entity.setEnvironments(job.getEnvironments() != null ? job.getEnvironments()
+                    .stream()
+                    .map(p -> EnvironmentEntity.builder()
+                            .key(p.getKey())
+                            .value(p.getValue())
+                            .build())
+                    .collect(Collectors.toList()) : null);
             entity.setCommand(job.getCommand());
             entity.setDirectory(job.getDirectory());
         } else {
