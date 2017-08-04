@@ -32,7 +32,7 @@ public class JobsFacade {
      * @return {@link Page<JobsDTO>}
      */
     public Page<JobsDTO> listAll(UserDTO client, Integer limit, Integer page) throws Exception {
-        return jobs.listAll(client, limit, page);
+        return jobs.listAll(limit, page);
     }
 
     /**

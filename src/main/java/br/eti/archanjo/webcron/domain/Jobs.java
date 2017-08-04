@@ -46,13 +46,11 @@ public class Jobs {
     }
 
     /**
-     * @param client {@link UserDTO}
-     * @param limit  {@link Integer}k
-     * @param page   {@link Integer}
+     * @param limit {@link Integer}
+     * @param page  {@link Integer}
      * @return {@link Page<JobsDTO>}
      */
-    public Page<JobsDTO> listAll(UserDTO client,
-                                 Integer limit, Integer page) throws Exception {
+    public Page<JobsDTO> listAll(Integer limit, Integer page) throws Exception {
         Page<JobsEntity> jobs = jobsRepository.findAllByOrderByIdDesc(new PageRequest(page, limit));
         return jobs.map(JobsParser::toDTO);
     }
