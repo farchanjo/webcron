@@ -43,15 +43,11 @@ public class Jobs {
         this.quartzService = quartzService;
         this.executionStatusRepository = executionStatusRepository;
 
-        /**
-         * Loading all jobs
-         */
-        loadAllJobsFromBase();
     }
 
     /**
      * @param client {@link UserDTO}
-     * @param limit  {@link Integer}
+     * @param limit  {@link Integer}k
      * @param page   {@link Integer}
      * @return {@link Page<JobsDTO>}
      */
@@ -61,11 +57,12 @@ public class Jobs {
         return jobs.map(JobsParser::toDTO);
     }
 
-    private void loadAllJobsFromBase() {
+    public void loadAllJobsFromBase() {
         jobsRepository.findAll()
                 .forEach(p -> {
                     try {
                         quartzService.saveJob(JobsParser.toDTO(p));
+                        logger.info(String.format("%s job started", p.getName()));
                     } catch (BadRequestException | SchedulerException e) {
                         logger.error("Jobs{loadAllJobsFromBase}", e);
                     }

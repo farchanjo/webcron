@@ -1,7 +1,9 @@
 package br.eti.archanjo.webcron.configs.main;
 
+import br.eti.archanjo.webcron.domain.Jobs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,6 +23,12 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 public class WebcronApplication implements CommandLineRunner {
     private final static Logger logger = LoggerFactory.getLogger(WebcronApplication.class);
 
+    private final Jobs jobs;
+
+    @Autowired
+    public WebcronApplication(Jobs jobs) {
+        this.jobs = jobs;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(WebcronApplication.class, args);
@@ -28,5 +36,8 @@ public class WebcronApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        logger.info("Loading all jobs.");
+        jobs.loadAllJobsFromBase();
+        logger.info("All jobs loaded.");
     }
 }
