@@ -6,6 +6,7 @@ import br.eti.archanjo.webcron.enums.AsyncType;
 import br.eti.archanjo.webcron.exceptions.BadRequestException;
 import br.eti.archanjo.webcron.quartz.jobs.CommandLineJob;
 import br.eti.archanjo.webcron.quartz.listeners.impl.JobListenerImpl;
+import com.newrelic.api.agent.Trace;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
@@ -37,6 +38,7 @@ public class QuartzService {
     /**
      * @param job {@link JobsDTO}
      */
+    @Trace(metricName = "QuartzService{saveJob}", async = true, dispatcher = true)
     public void saveJob(JobsDTO job) throws BadRequestException, SchedulerException {
         checkIfAlreadyRegistered(job);
         switch (job.getAsync()) {
@@ -57,6 +59,7 @@ public class QuartzService {
     /**
      * @param job {@link JobsDTO}
      */
+    @Trace(metricName = "QuartzService{deleteJob}", async = true, dispatcher = true)
     public void deleteJob(JobsDTO job) throws SchedulerException {
         switch (job.getAsync()) {
             case PERIODIC:
@@ -99,6 +102,7 @@ public class QuartzService {
      * @param job {@link JobsDTO}
      * @return {@link JobDetail}
      */
+    @Trace(metricName = "QuartzService{getJobsDetail}", async = true, dispatcher = true)
     private JobDetail getJobsDetail(JobsDTO job) {
         JobBuilder builder = JobBuilder.newJob(CommandLineJob.class);
         switch (job.getAsync()) {
@@ -116,6 +120,7 @@ public class QuartzService {
      * @param job {@link JobsDTO}
      * @return {@link Trigger}
      */
+    @Trace(metricName = "QuartzService{getTrigger}", async = true, dispatcher = true)
     private Trigger getTrigger(JobsDTO job) throws SchedulerException {
         TriggerBuilder<Trigger> builder = TriggerBuilder.newTrigger();
         switch (job.getAsync()) {

@@ -4,6 +4,7 @@ import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.entities.mongo.ExecutionStatusEntity;
 import br.eti.archanjo.webcron.pojo.JobResult;
 import br.eti.archanjo.webcron.repositories.mongo.ExecutionStatusRepository;
+import com.newrelic.api.agent.Trace;
 import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 import org.quartz.JobExecutionContext;
@@ -48,6 +49,7 @@ public class JobListenerImpl implements JobListener {
         logger.info(context.toString());
     }
 
+    @Trace(metricName = "JobListener{jobWasExecuted}", async = true, dispatcher = true)
     @Override
     public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
         try {
@@ -63,6 +65,7 @@ public class JobListenerImpl implements JobListener {
      * @param context      {@link JobExecutionContext}
      * @param jobException {@link JobExecutionException}
      */
+    @Trace(metricName = "JobListener{save}", async = true, dispatcher = true)
     private void save(JobExecutionContext context, JobExecutionException jobException) throws IOException {
         JobResult jobResult = (JobResult) context.getResult();
         ExecutionStatusEntity.ExecutionStatusEntityBuilder builder = ExecutionStatusEntity.builder();

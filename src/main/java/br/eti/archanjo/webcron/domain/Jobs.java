@@ -13,6 +13,7 @@ import br.eti.archanjo.webcron.repositories.mongo.ExecutionStatusRepository;
 import br.eti.archanjo.webcron.repositories.mysql.JobsRepository;
 import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
 import br.eti.archanjo.webcron.utils.parsers.JobsParser;
+import com.newrelic.api.agent.Trace;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,7 @@ public class Jobs {
         return jobs.map(JobsParser::toDTO);
     }
 
+    @Trace(metricName = "Jobs{loadAllJobsFromBase}", async = true, dispatcher = true)
     public void loadAllJobsFromBase() {
         jobsRepository.findAll()
                 .forEach(p -> {

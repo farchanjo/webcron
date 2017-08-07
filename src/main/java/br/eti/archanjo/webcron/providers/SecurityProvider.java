@@ -1,7 +1,7 @@
 package br.eti.archanjo.webcron.providers;
 
 import br.eti.archanjo.webcron.constants.ExceptionConstants;
-import br.eti.archanjo.webcron.domain.User;
+import br.eti.archanjo.webcron.domain.Users;
 import br.eti.archanjo.webcron.entities.mysql.UserEntity;
 import br.eti.archanjo.webcron.exceptions.NotFoundException;
 import br.eti.archanjo.webcron.utils.parsers.UserParser;
@@ -28,10 +28,10 @@ import java.util.Collections;
 public class SecurityProvider implements AuthenticationProvider {
     private static Logger logger = LoggerFactory.getLogger(SecurityProvider.class);
 
-    private final User user;
+    private final Users user;
 
     @Autowired
-    public SecurityProvider(User user) {
+    public SecurityProvider(Users user) {
         this.user = user;
     }
 

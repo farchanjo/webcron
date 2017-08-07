@@ -2,6 +2,7 @@ package br.eti.archanjo.webcron.domain;
 
 import br.eti.archanjo.webcron.dtos.UserDTO;
 import br.eti.archanjo.webcron.entities.mysql.UserEntity;
+import br.eti.archanjo.webcron.enums.Status;
 import br.eti.archanjo.webcron.exceptions.NotFoundException;
 import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
 import br.eti.archanjo.webcron.utils.HashUtils;
@@ -69,6 +70,15 @@ public class Users {
         }
         return UserParser.toDTO(userRepository.save(entity));
 
+    }
+
+    /**
+     * @param username {@link String}
+     * @param password {@link String}
+     * @return {@link UserEntity}
+     */
+    public UserEntity authenticate(String username, String password) {
+        return userRepository.findByUsernameAndPasswordAndStatus(username, HashUtils.sha256(password), Status.ENABLE);
     }
 
     /**
