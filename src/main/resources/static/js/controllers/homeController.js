@@ -13,8 +13,8 @@ angular.module('webCronApp')
             $location.path('/loginPage');
         });
 
-        $scope.feedTable = function (page, limit, jobName) {
-            JobsService.listJobsResult(page, limit, jobName).then(function (res) {
+        $scope.feedTable = function (page, limit, jobName, erros) {
+            JobsService.listJobsResult(page, limit, jobName, erros).then(function (res) {
                 $scope.content = res.data;
                 $scope.totalItems = res.data.totalElements;
                 $scope.smallnumPages = res.data.totalPages;
@@ -23,14 +23,14 @@ angular.module('webCronApp')
             });
         };
 
-        $scope.feedTable($scope.currentPage, $scope.pageSize);
+        $scope.feedTable($scope.currentPage, $scope.pageSize, null, $scope.onlyErros);
 
         $scope.pageChanged = function () {
             if ($scope.searched !== undefined && $scope.searched.length > 0) {
-                $scope.feedTable($scope.currentPage, $scope.pageSize, $scope.searched);
+                $scope.feedTable($scope.currentPage, $scope.pageSize, $scope.searched, $scope.onlyErros);
             }
             else {
-                $scope.feedTable($scope.currentPage, $scope.pageSize);
+                $scope.feedTable($scope.currentPage, $scope.pageSize, null, $scope.onlyErros);
             }
         };
 
@@ -56,10 +56,10 @@ angular.module('webCronApp')
 
         $scope.search = function () {
             if ($scope.searched !== undefined && $scope.searched.length > 0) {
-                $scope.feedTable($scope.currentPage, $scope.pageSize, $scope.searched);
+                $scope.feedTable($scope.currentPage, $scope.pageSize, $scope.searched, $scope.onlyErros);
             }
             else {
-                $scope.feedTable($scope.currentPage, $scope.pageSize);
+                $scope.feedTable($scope.currentPage, $scope.pageSize, null, $scope.onlyErros);
             }
         };
 
@@ -79,7 +79,7 @@ angular.module('webCronApp')
                         $scope.feedTable($scope.currentPage, $scope.pageSize, $scope.searched);
                     }
                     else {
-                        $scope.feedTable($scope.currentPage, $scope.pageSize);
+                        $scope.feedTable($scope.currentPage, $scope.pageSize, null, $scope.onlyErros);
                     }
                 }, $scope.reloadTime * 1000);
             }
@@ -89,7 +89,12 @@ angular.module('webCronApp')
         };
 
         $scope.onlyErrosFun = function (onlyErros) {
-
+            if ($scope.searched !== undefined && $scope.searched.length > 0) {
+                $scope.feedTable($scope.currentPage, $scope.pageSize, $scope.searched, $scope.onlyErros);
+            }
+            else {
+                $scope.feedTable($scope.currentPage, $scope.pageSize, null, $scope.onlyErros);
+            }
         };
 
         $scope.$on("$destroy", function () {

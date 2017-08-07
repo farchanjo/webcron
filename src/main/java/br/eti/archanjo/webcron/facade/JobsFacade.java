@@ -71,6 +71,8 @@ public class JobsFacade {
      * @return {@link Page <ExecutionStatusDTO>}
      */
     public Page<ExecutionStatusDTO> listResults(UserDTO client, Integer limit, Integer page, String name, Boolean erros) {
+        if (erros == null)
+            erros = false;
         return jobs.listResults(limit, page, name, erros);
     }
 

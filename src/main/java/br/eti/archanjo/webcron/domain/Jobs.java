@@ -124,22 +124,22 @@ public class Jobs {
      * @param client {@link UserDTO}
      * @param limit  {@link Integer}
      * @param page   {@link Integer}
-     * @param name
-     * @param erros
+     * @param name   {@link String}
+     * @param erros  {@link Boolean}
      * @return {@link Page<ExecutionStatusDTO>}
      */
     public Page<ExecutionStatusDTO> listResults(Integer limit, Integer page, String name, Boolean erros) {
         Page<ExecutionStatusEntity> executionStatusEntities;
         if (name == null) {
-            if (erros != null) {
-                executionStatusEntities = executionStatusRepository.findAllByErrorsOrderByCreatedDesc(erros, new PageRequest(page, limit));
+            if (erros) {
+                executionStatusEntities = executionStatusRepository.findAllByErrorsOrderByCreatedDesc(true, new PageRequest(page, limit));
             } else {
                 executionStatusEntities = executionStatusRepository.findAllByOrderByCreatedDesc(new PageRequest(page, limit));
             }
         } else {
             TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(name);
-            if (erros != null) {
-                executionStatusEntities = executionStatusRepository.findAllByErrorsOrderByCreatedDesc(criteria, erros, new PageRequest(page, limit));
+            if (erros) {
+                executionStatusEntities = executionStatusRepository.findAllByErrorsOrderByCreatedDesc(criteria, true, new PageRequest(page, limit));
             } else {
                 executionStatusEntities = executionStatusRepository.findByOrderByCreatedDesc(criteria, new PageRequest(page, limit));
             }

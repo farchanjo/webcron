@@ -22,11 +22,11 @@ angular.module('webCronApp')
         /**
          * @returns Promisse
          */
-        this.listJobsResult = function (page, limit, jobName) {
+        this.listJobsResult = function (page, limit, jobName, erros) {
             var req = {
                 method: 'GET',
                 url: '/jobs/results',
-                params: {page: (page - 1), limit: limit, name: jobName},
+                params: {page: (page - 1), limit: limit, name: jobName, erros: erros},
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
