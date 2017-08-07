@@ -75,11 +75,14 @@ public class JobListenerImpl implements JobListener {
         if (jobResult != null && jobResult.getTmpFile() != null) {
             builder.output(FileUtils.readFileToString(jobResult.getTmpFile().toFile()));
             builder.exitCode(jobResult.getExitValue());
+            if (jobResult.getExitValue() != 0)
+                builder.errors(true);
             if (jobResult.getTmpFile().toFile().delete())
                 logger.debug(String.format("%s file deleted", jobResult.getTmpFile().toAbsolutePath()));
         } else {
             builder.output("No output");
             builder.exitCode(-1);
+            builder.errors(true);
         }
         if (jobException != null) {
             builder.errors(true);
