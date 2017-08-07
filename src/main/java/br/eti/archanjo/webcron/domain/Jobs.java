@@ -125,15 +125,24 @@ public class Jobs {
      * @param limit  {@link Integer}
      * @param page   {@link Integer}
      * @param name
+     * @param erros
      * @return {@link Page<ExecutionStatusDTO>}
      */
-    public Page<ExecutionStatusDTO> listResults(UserDTO client, Integer limit, Integer page, String name) {
+    public Page<ExecutionStatusDTO> listResults(Integer limit, Integer page, String name, Boolean erros) {
         Page<ExecutionStatusEntity> executionStatusEntities;
         if (name == null) {
-            executionStatusEntities = executionStatusRepository.findAllByOrderByCreatedDesc(new PageRequest(page, limit));
+            if (erros != null) {
+                executionStatusEntities = executionStatusRepository.findAllByErrorsOrderByCreatedDesc(erros, new PageRequest(page, limit));
+            } else {
+                executionStatusEntities = executionStatusRepository.findAllByOrderByCreatedDesc(new PageRequest(page, limit));
+            }
         } else {
             TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(name);
-            executionStatusEntities = executionStatusRepository.findByOrderByCreatedDesc(criteria, new PageRequest(page, limit));
+            if (erros != null) {
+                executionStatusEntities = executionStatusRepository.findAllByErrorsOrderByCreatedDesc(criteria, erros, new PageRequest(page, limit));
+            } else {
+                executionStatusEntities = executionStatusRepository.findByOrderByCreatedDesc(criteria, new PageRequest(page, limit));
+            }
         }
         return executionStatusEntities.map(source -> ExecutionStatusDTO.builder()
                 .created(source.getCreated())

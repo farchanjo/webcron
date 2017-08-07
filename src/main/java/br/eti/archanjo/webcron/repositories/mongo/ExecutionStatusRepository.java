@@ -8,6 +8,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ExecutionStatusRepository extends MongoRepository<ExecutionStatusEntity, String> {
     Page<ExecutionStatusEntity> findAllByJobUserIdOrderByCreatedDesc(Long id, Pageable page);
+
     Page<ExecutionStatusEntity> findAllByOrderByCreatedDesc(Pageable page);
+
     Page<ExecutionStatusEntity> findByOrderByCreatedDesc(TextCriteria criteria, Pageable page);
+
+    Page<ExecutionStatusEntity> findAllByErrorsOrderByCreatedDesc(boolean errors, Pageable page);
+
+    Page<ExecutionStatusEntity> findAllByErrorsOrderByCreatedDesc(TextCriteria criteria, boolean erros, Pageable page);
+
 }

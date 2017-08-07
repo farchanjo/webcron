@@ -67,10 +67,11 @@ public class JobsFacade {
      * @param limit  {@link Integer}
      * @param page   {@link Integer}
      * @param name   {@link String}
-     * @return {@link Page<ExecutionStatusDTO>}
+     * @param erros  {@link Boolean}
+     * @return {@link Page <ExecutionStatusDTO>}
      */
-    public Page<ExecutionStatusDTO> listResults(UserDTO client, Integer limit, Integer page, String name) {
-        return jobs.listResults(client, limit, page, name);
+    public Page<ExecutionStatusDTO> listResults(UserDTO client, Integer limit, Integer page, String name, Boolean erros) {
+        return jobs.listResults(limit, page, name, erros);
     }
 
 }

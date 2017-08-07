@@ -4,6 +4,7 @@ angular.module('webCronApp')
         $scope.pageSize = 15;
         $scope.currentPage = 1;
         $scope.reloadTime = 5;
+        $scope.onlyErros = false;
         var autoReloadPromise;
 
         UsersService.me().then(function (res) {
@@ -85,6 +86,10 @@ angular.module('webCronApp')
             else {
                 $interval.cancel(autoReloadPromise);
             }
+        };
+
+        $scope.onlyErrosFun = function (onlyErros) {
+
         };
 
         $scope.$on("$destroy", function () {

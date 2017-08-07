@@ -10,12 +10,20 @@
                    placeholder="search by name">
         </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
+        <div class="form-inline" style="margin: 23px 0;">
+            <label>
+                <input type="checkbox" class="checkbox checkbox-inline" ng-init="onlyErros=false" ng-click="onlyErrosFun(onlyErros)" ng-model="onlyErros"> Only Erros
+            </label>
+        </div>
+    </div>
+    <div class="col-md-1">
         <div class="form-inline" style="margin: 17px 0;">
             <label>
                 Reload <input ng-model="reloadTime" type="number" class="form-control input-sm"
                               placeholder="Auto Reload" style="width: 50px">
-                <input type="checkbox" class="checkbox checkbox-inline" ng-init="checked=false" ng-model="checked" ng-click="startAuto(checked)">
+                <input type="checkbox" class="checkbox checkbox-inline" ng-init="checked=false" ng-model="checked"
+                       ng-click="startAuto(checked)">
             </label>
         </div>
     </div>
