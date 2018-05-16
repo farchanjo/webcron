@@ -52,3 +52,4 @@ webcron:
     folder: /Users/fabricio/1/log
   shell:
     bin: /bin/bash
+  system-user-file: /etc/passwd

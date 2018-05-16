@@ -18,6 +18,7 @@ public class PropertiesConfig {
     private String applicationUrl;
     private Logging logging;
     private Shell shell;
+    private Path systemUserFile;
 
     @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @NoArgsConstructor(access = AccessLevel.PUBLIC)
