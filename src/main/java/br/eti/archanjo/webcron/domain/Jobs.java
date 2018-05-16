@@ -83,6 +83,7 @@ public class Jobs {
             entity.setAsync(job.getAsync());
             entity.setCron(job.getCron());
             entity.setStatus(job.getStatus());
+            entity.setSystemUser(job.getSystem().getUser());
             entity.setUnit(job.getUnit());
             entity.setEnvironments(job.getEnvironments() != null ? job.getEnvironments()
                     .stream()

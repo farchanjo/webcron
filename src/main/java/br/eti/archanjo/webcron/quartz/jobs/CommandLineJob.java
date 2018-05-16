@@ -4,6 +4,7 @@ import br.eti.archanjo.webcron.configs.PropertiesConfig;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.pojo.JobResult;
 import lombok.Getter;
+import org.apache.commons.lang3.SystemUtils;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -67,6 +68,11 @@ public class CommandLineJob extends QuartzJobBean {
 
     private List<String> getCommand(String command) {
         List<String> commandList = new ArrayList<>();
+        if (SystemUtils.IS_OS_LINUX) {
+            commandList.add("su");
+            commandList.add("-");
+            commandList.add(getJob().getSystem().getUser());
+        }
         commandList.add(config.getShell().getBin());
         commandList.add("-c");
         commandList.add(command);
@@ -85,7 +91,7 @@ public class CommandLineJob extends QuartzJobBean {
                 pb.environment().put(k, v);
             }
         });
-        
+
         if (job.getDirectory() == null || job.getDirectory().isEmpty()) {
             pb.directory(new File(System.getProperty("user.home")));
         } else {

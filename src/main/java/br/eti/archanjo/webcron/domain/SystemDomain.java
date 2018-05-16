@@ -37,11 +37,11 @@ public class SystemDomain {
             logger.error(String.format("%s cannot be found", config.getSystemUserFile()));
 
         return Files.lines(config.getSystemUserFile())
-                .map(p -> userFilter.splitAsStream(p)
+                .map(line -> userFilter.splitAsStream(line)
                         .findFirst()
                         .map(d -> SystemUsersDTO.builder().user(d).build())
                         .get())
-                .filter(p -> !p.getUser().startsWith("#"))
+                .filter(dto -> !dto.getUser().startsWith("#"))
                 .collect(Collectors.toList());
     }
 }

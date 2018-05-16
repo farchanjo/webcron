@@ -20,6 +20,10 @@ public class SystemFacade {
         this.system = system;
     }
 
+    /**
+     * @return {@link List<SystemUsersDTO>}
+     * @throws IOException
+     */
     public List<SystemUsersDTO> getSysmtemUsers() throws IOException {
         return system.getSysmtemUsers();
     }

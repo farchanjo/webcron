@@ -2,6 +2,7 @@ package br.eti.archanjo.webcron.utils.parsers;
 
 
 import br.eti.archanjo.webcron.dtos.JobsDTO;
+import br.eti.archanjo.webcron.dtos.SystemUsersDTO;
 import br.eti.archanjo.webcron.entities.mysql.JobsEntity;
 
 import java.util.stream.Collectors;
@@ -17,12 +18,13 @@ public class JobsParser {
                 .name(entity.getName())
                 .id(entity.getId())
                 .async(entity.getAsync())
+                .fixedRate(entity.getFixedRate())
                 .environments(entity.getEnvironments() != null ? entity.getEnvironments()
                         .parallelStream()
                         .map(EnvironmentParser::toDTO)
                         .collect(Collectors.toList()) : null)
                 .cron(entity.getCron())
-                .fixedRate(entity.getFixedRate())
+                .system(SystemUsersDTO.builder().user(entity.getSystemUser()).build())
                 .unit(entity.getUnit())
                 .directory(entity.getDirectory())
                 .userId(entity.getUser().getId())
@@ -44,6 +46,7 @@ public class JobsParser {
                         .map(EnvironmentParser::toEntity)
                         .collect(Collectors.toList()) : null)
                 .command(dto.getCommand())
+                .systemUser(dto.getSystem().getUser())
                 .async(dto.getAsync())
                 .fixedRate(dto.getFixedRate())
                 .cron(dto.getCron())

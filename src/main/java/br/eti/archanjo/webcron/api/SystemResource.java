@@ -2,14 +2,11 @@ package br.eti.archanjo.webcron.api;
 
 import br.eti.archanjo.webcron.constants.PathContants;
 import br.eti.archanjo.webcron.dtos.SystemUsersDTO;
-import br.eti.archanjo.webcron.dtos.UserDTO;
 import br.eti.archanjo.webcron.facade.SystemFacade;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,7 +21,7 @@ public class SystemResource extends GenericResource {
         this.systemFacade = systemFacade;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(path = PathContants.USERS, method = RequestMethod.GET)
     public List<SystemUsersDTO> listSystemUsers() throws Exception {
         return systemFacade.getSysmtemUsers();
     }

@@ -45,6 +45,9 @@ public class JobsEntity implements Serializable {
     @Column(name = "unit")
     private TimeUnit unit;
 
+    @Column(name = "systemUser")
+    private String systemUser;
+
     @Column(name = "cron")
     private String cron;
 

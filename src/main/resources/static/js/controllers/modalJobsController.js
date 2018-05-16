@@ -1,7 +1,8 @@
 angular.module('webCronApp')
-    .controller('ModalJobCtrl', function ($scope, $log, $uibModalInstance, job, JobsService) {
+    .controller('ModalJobCtrl', function ($scope, $log, $uibModalInstance, job, JobsService, SystemService) {
         $log.debug("Model Jobs Controller has been load.");
-
+        $scope.systemUsers = [];
+        $scope.systemUser = 'root';
         $scope.type = 'CRON';
         $scope.status = 'ENABLE';
         $scope.unit = 'MINUTES';
@@ -67,6 +68,9 @@ angular.module('webCronApp')
                     fixedRate: $scope.rate,
                     status: $scope.status,
                     unit: $scope.unit,
+                    system: {
+                        user: $scope.systemUser
+                    },
                     cron: $scope.cron,
                     command: $scope.command,
                     directory: $scope.directory
@@ -96,4 +100,9 @@ angular.module('webCronApp')
         $scope.cancelModal = function () {
             $uibModalInstance.dismiss();
         };
+
+        SystemService.listUsers()
+            .then(function (res) {
+                $scope.systemUsers = res.data;
+            });
     });

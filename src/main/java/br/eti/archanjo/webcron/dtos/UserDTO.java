@@ -4,8 +4,6 @@ import br.eti.archanjo.webcron.enums.Roles;
 import br.eti.archanjo.webcron.enums.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +16,8 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO implements Serializable {
     private static final long serialVersionUID = 7944032954933121911L;
@@ -30,55 +30,4 @@ public class UserDTO implements Serializable {
     private Date modified;
     private Roles roles;
     private String password;
-
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", username='" + username + '\'' +
-                ", status=" + status +
-                ", created=" + created +
-                ", modified=" + modified +
-                ", roles=" + roles +
-                ", password='" + password + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        UserDTO userDTO = (UserDTO) o;
-
-        return new EqualsBuilder()
-                .append(id, userDTO.id)
-                .append(name, userDTO.name)
-                .append(email, userDTO.email)
-                .append(username, userDTO.username)
-                .append(status, userDTO.status)
-                .append(created, userDTO.created)
-                .append(modified, userDTO.modified)
-                .append(roles, userDTO.roles)
-                .append(password, userDTO.password)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(id)
-                .append(name)
-                .append(email)
-                .append(username)
-                .append(status)
-                .append(created)
-                .append(modified)
-                .append(roles)
-                .append(password)
-                .toHashCode();
-    }
 }

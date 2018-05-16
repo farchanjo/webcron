@@ -1,5 +1,5 @@
 angular.module('webCronApp')
-    .controller('ModalUserCtrl', function ($scope, $log, $uibModalInstance, user, UsersService) {
+    .controller('ModalUserCtrl', function ($scope, $log, $uibModalInstance, user, UsersService, SystemService) {
         $log.debug("Model User Controller has been load.");
         if (user !== undefined) {
             $scope.user = user;
