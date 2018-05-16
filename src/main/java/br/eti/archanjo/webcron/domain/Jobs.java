@@ -1,8 +1,6 @@
 package br.eti.archanjo.webcron.domain;
 
-import br.eti.archanjo.webcron.dtos.ExecutionStatusDTO;
-import br.eti.archanjo.webcron.dtos.JobsDTO;
-import br.eti.archanjo.webcron.dtos.UserDTO;
+import br.eti.archanjo.webcron.dtos.*;
 import br.eti.archanjo.webcron.entities.mongo.ExecutionStatusEntity;
 import br.eti.archanjo.webcron.entities.mysql.EnvironmentEntity;
 import br.eti.archanjo.webcron.entities.mysql.JobsEntity;
@@ -26,6 +24,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -53,7 +53,7 @@ public class Jobs {
      * @param page  {@link Integer}
      * @return {@link Page<JobsDTO>}
      */
-    public Page<JobsDTO> listAll(Integer limit, Integer page) throws Exception {
+    public Page<JobsDTO> listAll(Integer limit, Integer page) {
         Page<JobsEntity> jobs = jobsRepository.findAllByOrderByIdDesc(PageRequest.of(page, limit));
         return jobs.map(JobsParser::toDTO);
     }
@@ -78,7 +78,9 @@ public class Jobs {
      */
     public JobsDTO save(UserDTO client, JobsDTO job) throws Exception {
         JobsEntity entity;
-        if (job != null && job.getId() != null) {
+        if (job == null)
+            throw new BadRequestException("Missing job data");
+        if (job.getId() != null) {
             Optional<JobsEntity> jobsEntity = jobsRepository.findById(job.getId());
             if (!jobsEntity.isPresent())
                 throw new NotFoundException(String.format("%s cannot be found", job.getName()));
@@ -132,11 +134,10 @@ public class Jobs {
     }
 
     /**
-     * @param client {@link UserDTO}
-     * @param limit  {@link Integer}
-     * @param page   {@link Integer}
-     * @param name   {@link String}
-     * @param erros  {@link Boolean}
+     * @param limit {@link Integer}
+     * @param page  {@link Integer}
+     * @param name  {@link String}
+     * @param erros {@link Boolean}
      * @return {@link Page<ExecutionStatusDTO>}
      */
     public Page<ExecutionStatusDTO> listResults(Integer limit, Integer page, String name, Boolean erros) {
@@ -169,5 +170,39 @@ public class Jobs {
                 .id(source.getId())
                 .job(source.getJob())
                 .build());
+    }
+
+    /**
+     * @return {@link List<RunningJobDTO>}
+     */
+    public List<RunningJobDTO> listRunning() {
+        try {
+            return quartzService.getScheduler()
+                    .getCurrentlyExecutingJobs()
+                    .stream()
+                    .map(job -> RunningJobDTO.builder()
+                            .id(job.getFireInstanceId())
+                            .name(job.getJobDetail().getKey().getName())
+                            .fireTime(job.getFireTime())
+                            .nextFireTime(job.getNextFireTime())
+                            .prevFireTime(job.getPreviousFireTime())
+                            .jobRunTime(job.getJobRunTime())
+                            .trigger(TriggerDTO.builder()
+                                    .name(job.getTrigger().getKey().getName())
+                                    .calendarName(job.getTrigger().getCalendarName())
+                                    .description(job.getTrigger().getDescription())
+                                    .startTime(job.getTrigger().getStartTime())
+                                    .endTime(job.getTrigger().getEndTime())
+                                    .priority(job.getTrigger().getPriority())
+                                    .nextFireTime(job.getTrigger().getNextFireTime())
+                                    .prevFireTime(job.getTrigger().getPreviousFireTime())
+                                    .build())
+                            .scheduledFireTime(job.getScheduledFireTime())
+                            .build())
+                    .collect(Collectors.toList());
+        } catch (SchedulerException e) {
+            logger.warn("Jobs{listRunning}", e);
+            return Collections.singletonList(RunningJobDTO.builder().build());
+        }
     }
 }

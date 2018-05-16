@@ -212,4 +212,10 @@ public class QuartzService {
         return map;
     }
 
+    /**
+     * @return {@link Scheduler}
+     */
+    public Scheduler getScheduler() {
+        return scheduler;
+    }
 }

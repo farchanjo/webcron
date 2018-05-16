@@ -17,7 +17,6 @@ public class Schedulers implements SchedulingConfigurer {
     private final Logger logger = LoggerFactory.getLogger(Schedulers.class);
     private final ThreadPoolTaskScheduler taskSchedulerExecutor;
 
-
     @Autowired
     public Schedulers(ThreadPoolTaskScheduler taskSchedulerExecutor) {
         this.taskSchedulerExecutor = taskSchedulerExecutor;

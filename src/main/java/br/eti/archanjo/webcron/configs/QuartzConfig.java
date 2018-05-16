@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -57,4 +58,14 @@ public class QuartzConfig {
         propertiesFactoryBean.afterPropertiesSet();
         return propertiesFactoryBean.getObject();
     }
+
+    @PreDestroy
+    public void shutdownScheduler() {
+        try {
+            scheduler().shutdown();
+        } catch (SchedulerException e) {
+            logger.error("QuartzConfig{shutdownScheduler}", e);
+        }
+    }
+
 }

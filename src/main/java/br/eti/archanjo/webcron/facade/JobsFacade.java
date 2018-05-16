@@ -3,6 +3,7 @@ package br.eti.archanjo.webcron.facade;
 import br.eti.archanjo.webcron.domain.Jobs;
 import br.eti.archanjo.webcron.dtos.ExecutionStatusDTO;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
+import br.eti.archanjo.webcron.dtos.RunningJobDTO;
 import br.eti.archanjo.webcron.dtos.UserDTO;
 import br.eti.archanjo.webcron.enums.Roles;
 import br.eti.archanjo.webcron.exceptions.BadRequestException;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -76,4 +79,10 @@ public class JobsFacade {
         return jobs.listResults(limit, page, name, erros);
     }
 
+    /**
+     * @return {@link List<RunningJobDTO>}
+     */
+    public List<RunningJobDTO> listRunningJobs() {
+        return jobs.listRunning();
+    }
 }
