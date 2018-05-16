@@ -29,6 +29,9 @@ public class SystemDomain {
         this.config = config;
     }
 
+    /**
+     * @return {@link List<SystemUsersDTO>}
+     */
     public List<SystemUsersDTO> getSysmtemUsers() throws IOException {
         if (!Files.exists(config.getSystemUserFile()))
             logger.error(String.format("%s cannot be found", config.getSystemUserFile()));
