@@ -22,8 +22,6 @@ spring:
     mongodb:
       host: vm.services
       database: webcron
-      repositories:
-        enabled: true
   jpa:
     hibernate:
       ddl-auto: update
