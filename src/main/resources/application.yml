@@ -39,11 +39,7 @@ server:
   port: 8080
   tomcat:
     remote-ip-header: X-Forwarded-For
-
-management:
-  context-path: /management
-  port: 8081
-
+    
 webcron:
   httplimits:
     limit: 100
