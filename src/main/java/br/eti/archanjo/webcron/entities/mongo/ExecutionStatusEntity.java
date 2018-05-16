@@ -38,7 +38,7 @@ public class ExecutionStatusEntity implements Serializable {
     @Field("job")
     private JobsDTO job;
     @Field("errors")
-    private boolean errors = false;
+    private boolean errors;
     @Field("exitCode")
     private int exitCode;
     @Field("errormessage")

@@ -8,6 +8,7 @@ import br.eti.archanjo.webcron.entities.mysql.EnvironmentEntity;
 import br.eti.archanjo.webcron.entities.mysql.JobsEntity;
 import br.eti.archanjo.webcron.entities.mysql.UserEntity;
 import br.eti.archanjo.webcron.exceptions.BadRequestException;
+import br.eti.archanjo.webcron.exceptions.NotFoundException;
 import br.eti.archanjo.webcron.quartz.QuartzService;
 import br.eti.archanjo.webcron.repositories.mongo.ExecutionStatusRepository;
 import br.eti.archanjo.webcron.repositories.mysql.JobsRepository;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -52,7 +54,7 @@ public class Jobs {
      * @return {@link Page<JobsDTO>}
      */
     public Page<JobsDTO> listAll(Integer limit, Integer page) throws Exception {
-        Page<JobsEntity> jobs = jobsRepository.findAllByOrderByIdDesc(new PageRequest(page, limit));
+        Page<JobsEntity> jobs = jobsRepository.findAllByOrderByIdDesc(PageRequest.of(page, limit));
         return jobs.map(JobsParser::toDTO);
     }
 
@@ -77,7 +79,10 @@ public class Jobs {
     public JobsDTO save(UserDTO client, JobsDTO job) throws Exception {
         JobsEntity entity;
         if (job != null && job.getId() != null) {
-            entity = jobsRepository.findOne(job.getId());
+            Optional<JobsEntity> jobsEntity = jobsRepository.findById(job.getId());
+            if (!jobsEntity.isPresent())
+                throw new NotFoundException(String.format("%s cannot be found", job.getName()));
+            entity = jobsEntity.get();
             entity.setName(job.getName());
             entity.setFixedRate(job.getFixedRate());
             entity.setAsync(job.getAsync());
@@ -95,7 +100,10 @@ public class Jobs {
             entity.setCommand(job.getCommand());
             entity.setDirectory(job.getDirectory());
         } else {
-            UserEntity userEntity = userRepository.findOne(client.getId());
+            Optional<UserEntity> optionalUserEntity = userRepository.findById(client.getId());
+            if (!optionalUserEntity.isPresent())
+                throw new NotFoundException(String.format("%s user cannot be found", client.getUsername()));
+            UserEntity userEntity = optionalUserEntity.get();
             entity = JobsParser.toEntity(job);
             entity.setUser(userEntity);
         }
@@ -112,12 +120,12 @@ public class Jobs {
      * @return {@link Boolean}
      */
     public boolean delete(UserDTO client, Long id) throws SchedulerException {
-        JobsEntity entity = jobsRepository.findOne(id);
-        if (entity != null &&
-                entity.getUser() != null &&
-                entity.getUser().getId().equals(client.getId())) {
-            jobsRepository.delete(id);
-            quartzService.deleteJob(JobsParser.toDTO(entity));
+        Optional<JobsEntity> entity = jobsRepository.findById(id);
+        if (entity.isPresent() &&
+                entity.get().getUser() != null &&
+                entity.get().getUser().getId().equals(client.getId())) {
+            jobsRepository.deleteById(id);
+            quartzService.deleteJob(JobsParser.toDTO(entity.get()));
             return true;
         }
         return false;
@@ -135,16 +143,16 @@ public class Jobs {
         Page<ExecutionStatusEntity> executionStatusEntities;
         if (name == null) {
             if (erros) {
-                executionStatusEntities = executionStatusRepository.findAllByErrorsOrderByCreatedDesc(true, new PageRequest(page, limit));
+                executionStatusEntities = executionStatusRepository.findAllByErrorsOrderByCreatedDesc(true, PageRequest.of(page, limit));
             } else {
-                executionStatusEntities = executionStatusRepository.findAllByOrderByCreatedDesc(new PageRequest(page, limit));
+                executionStatusEntities = executionStatusRepository.findAllByOrderByCreatedDesc(PageRequest.of(page, limit));
             }
         } else {
             TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(name);
             if (erros) {
-                executionStatusEntities = executionStatusRepository.findAllByErrorsOrderByCreatedDesc(criteria, true, new PageRequest(page, limit));
+                executionStatusEntities = executionStatusRepository.findAllByErrorsOrderByCreatedDesc(criteria, true, PageRequest.of(page, limit));
             } else {
-                executionStatusEntities = executionStatusRepository.findByOrderByCreatedDesc(criteria, new PageRequest(page, limit));
+                executionStatusEntities = executionStatusRepository.findByOrderByCreatedDesc(criteria, PageRequest.of(page, limit));
             }
         }
         return executionStatusEntities.map(source -> ExecutionStatusDTO.builder()

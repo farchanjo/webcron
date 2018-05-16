@@ -13,11 +13,6 @@ spring:
     database: 15
     host: vm.services
     port: 6379
-    timeout: 120000
-    pool:
-      max-active: 16
-      max-idle: 4
-      max-wait: -1
   datasource:
     url: jdbc:mysql://vm.services:3306/webcrons?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&useTimezone=true&serverTimezone=UTC
     username: root
@@ -39,7 +34,7 @@ server:
   port: 8080
   tomcat:
     remote-ip-header: X-Forwarded-For
-    
+
 webcron:
   httplimits:
     limit: 100

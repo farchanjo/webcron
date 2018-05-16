@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class Users {
@@ -28,8 +30,11 @@ public class Users {
      * @param client {@link UserDTO}
      * @return
      */
-    public UserDTO me(UserDTO client) {
-        return UserParser.toDTO(userRepository.findOne(client.getId()));
+    public UserDTO me(UserDTO client) throws NotFoundException {
+        Optional<UserEntity> user = userRepository.findById(client.getId());
+        if (user.isPresent())
+            return UserParser.toDTO(user.get());
+        throw new NotFoundException(String.format("%s user not found", client.getUsername()));
     }
 
     /**
@@ -49,7 +54,10 @@ public class Users {
                     .username(user.getUsername())
                     .build();
         } else {
-            entity = userRepository.findOne(user.getId());
+            Optional<UserEntity> userEntity = userRepository.findById(user.getId());
+            if (!userEntity.isPresent())
+                throw new NotFoundException(String.format("%s user cannot be found", user.getUsername()));
+            entity = userEntity.get();
             if (user.getName() != null && !user.getName().isEmpty())
                 entity.setName(user.getName());
 
@@ -87,7 +95,7 @@ public class Users {
      * @return {@link Page<UserDTO>}
      */
     public Page<UserDTO> listUsers(Integer limit, Integer page) {
-        Page<UserEntity> usersPage = userRepository.findAll(new PageRequest(page, limit));
+        Page<UserEntity> usersPage = userRepository.findAll(PageRequest.of(page, limit));
         return usersPage.map(source -> UserDTO.builder()
                 .id(source.getId())
                 .name(source.getName())
