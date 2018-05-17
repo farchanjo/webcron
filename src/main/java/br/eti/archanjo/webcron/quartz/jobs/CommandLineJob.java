@@ -5,9 +5,7 @@ import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.pojo.JobResult;
 import lombok.Getter;
 import org.apache.commons.lang3.SystemUtils;
-import org.quartz.DisallowConcurrentExecution;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +23,10 @@ import java.util.List;
 
 @Getter
 @DisallowConcurrentExecution
-public class CommandLineJob extends QuartzJobBean {
+public class CommandLineJob extends QuartzJobBean implements InterruptableJob {
     private final Logger logger = LoggerFactory.getLogger(CommandLineJob.class);
     private JobsDTO job;
+    private Process process;
     private PropertiesConfig.Logging loggingConfig;
 
     @Autowired
@@ -57,7 +56,7 @@ public class CommandLineJob extends QuartzJobBean {
         Path output = setOutputs(pb);
         pb.command(getCommand(getJob().getCommand()));
         try {
-            Process process = pb.start();
+            process = pb.start();
             int exitCode = process.waitFor();
             context.setResult(JobResult.builder().exitValue(exitCode).tmpFile(output).build());
         } catch (Exception e) {
@@ -113,5 +112,10 @@ public class CommandLineJob extends QuartzJobBean {
         pb.redirectError(ProcessBuilder.Redirect.appendTo(tmpFile.toFile()));
         pb.redirectOutput(ProcessBuilder.Redirect.appendTo(tmpFile.toFile()));
         return tmpFile;
+    }
+
+    @Override
+    public void interrupt() throws UnableToInterruptJobException {
+        process.destroy();
     }
 }

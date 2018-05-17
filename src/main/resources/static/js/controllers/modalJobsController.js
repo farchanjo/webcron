@@ -2,8 +2,8 @@ angular.module('webCronApp')
     .controller('ModalJobCtrl', function ($scope, $log, $uibModalInstance, job, JobsService, SystemService) {
         $log.debug("Model Jobs Controller has been load.");
         $scope.systemUsers = [];
-        $scope.systemUser = 'root';
         $scope.type = 'CRON';
+        $scope.systemUser = 'root';
         $scope.status = 'ENABLE';
         $scope.unit = 'MINUTES';
         $scope.asyncType = [{
@@ -46,6 +46,7 @@ angular.module('webCronApp')
             $scope.rate = job.fixedRate;
             $scope.status = job.status;
             $scope.unit = job.unit;
+            $scope.systemUser = job.system.user;
             $scope.cron = job.cron;
             $scope.command = job.command;
             $scope.directory = job.directory;

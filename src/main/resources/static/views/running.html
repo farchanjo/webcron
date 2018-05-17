@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-inline" style="margin: 17px 0;">
+            <label>
+                Reload <input ng-model="reloadTime" type="number" class="form-control input-sm"
+                              placeholder="Auto Reload" style="width: 50px">
+                <input type="checkbox" class="checkbox checkbox-inline" ng-init="checked=false" ng-model="checked"
+                       ng-click="startAuto(checked)">
+            </label>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top: 10px; font-size: 12px;">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>
+                        JOB's NAME
+                    </th>
+                    <th>
+                        RUN TIMES
+                    </th>
+                    <th>
+                        FIRE TIME
+                    </th>
+                    <th>
+                        NEXT FIRE TIME
+                    </th>
+                    <th>
+                        PREVIOUS FIRE TIME
+                    </th>
+                    <th>
+                        SCHEDULED FIRE TIME
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="job in jobsRunning">
+                    <td>
+                        {{job.name}}
+                    </td>
+                    <td>
+                        {{job.jobRunTime}}
+                    </td>
+                    <td>
+                        {{job.fireTime | date:'dd/MM/yyyy - HH:mm:ss'}}
+                    </td>
+                    <td>
+                        {{job.nextFireTime | date:'dd/MM/yyyy - HH:mm:ss'}}
+                    </td>
+                    <td>
+                        {{job.prevFireTime | date:'dd/MM/yyyy - HH:mm:ss'}}
+                    </td>
+                    <td>
+                        {{job.scheduledFireTime | date:'dd/MM/yyyy - HH:mm:ss'}}
+                    </td>
+                    <td>
+                        <span ng-click="stopJob(job)">Stop</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

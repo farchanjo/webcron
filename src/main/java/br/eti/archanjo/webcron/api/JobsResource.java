@@ -42,6 +42,10 @@ public class JobsResource extends GenericResource {
     public List<RunningJobDTO> listRunningJob() throws Exception {
         return jobsFacade.listRunningJobs();
     }
+    @RequestMapping(path = PathContants.RUNNNING + PathContants.STOP, method = RequestMethod.POST)
+    public RunningJobDTO listRunningJob(@RequestBody RunningJobDTO runningJobDTO) throws Exception {
+        return jobsFacade.stopRunningService(runningJobDTO);
+    }
 
     @RequestMapping(path = PathContants.RESULTS, method = RequestMethod.GET)
     public Page<ExecutionStatusDTO> listExecutionStatus(@RequestParam(value = "limit") Integer limit,

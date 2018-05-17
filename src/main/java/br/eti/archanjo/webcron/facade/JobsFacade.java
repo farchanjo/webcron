@@ -85,4 +85,12 @@ public class JobsFacade {
     public List<RunningJobDTO> listRunningJobs() {
         return jobs.listRunning();
     }
+
+    /**
+     * @param runningJobDTO {@link RunningJobDTO}
+     * @return {@link RunningJobDTO}
+     */
+    public RunningJobDTO stopRunningService(RunningJobDTO runningJobDTO) {
+        return jobs.stopRunningService(runningJobDTO);
+    }
 }

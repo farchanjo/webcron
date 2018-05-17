@@ -13,7 +13,9 @@ import br.eti.archanjo.webcron.repositories.mysql.JobsRepository;
 import br.eti.archanjo.webcron.repositories.mysql.UserRepository;
 import br.eti.archanjo.webcron.utils.parsers.JobsParser;
 import com.newrelic.api.agent.Trace;
+import org.quartz.JobKey;
 import org.quartz.SchedulerException;
+import org.quartz.TriggerKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -204,5 +206,18 @@ public class Jobs {
             logger.warn("Jobs{listRunning}", e);
             return Collections.singletonList(RunningJobDTO.builder().build());
         }
+    }
+
+    /**
+     * @param runningJobDTO {@link RunningJobDTO}
+     * @return {@link RunningJobDTO}
+     */
+    public RunningJobDTO stopRunningService(RunningJobDTO runningJobDTO) {
+        try {
+            quartzService.getScheduler().interrupt(runningJobDTO.getId());
+        } catch (SchedulerException e) {
+            logger.warn("Jobs{stopRunningService}", e);
+        }
+        return runningJobDTO;
     }
 }

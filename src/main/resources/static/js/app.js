@@ -38,6 +38,11 @@ angular
                 controller: 'JobsCtrl',
                 controllerAs: 'jobs'
             })
+            .when('/running', {
+                templateUrl: 'views/running.html',
+                controller: 'RunningCtrl',
+                controllerAs: 'running'
+            })
             .when('/me', {
                 templateUrl: 'views/me.html',
                 controller: 'MeCtrl',

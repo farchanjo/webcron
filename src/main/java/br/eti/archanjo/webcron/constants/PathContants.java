@@ -18,4 +18,5 @@ public class PathContants {
     public static final String LOG = "/log";
     public static final String SYSTEM = "/system";
     public static final String RUNNNING = "/running";
+    public static final String STOP = "/stop";
 }

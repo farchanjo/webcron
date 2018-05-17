@@ -22,6 +22,39 @@ angular.module('webCronApp')
         /**
          * @returns Promisse
          */
+        this.stopTigger = function (job) {
+            var req = {
+                method: 'POST',
+                url: '/jobs/running/stop',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': $cookies.get('XSRF-TOKEN')
+                },
+                data: job
+            };
+            return $http(req);
+        };
+
+        /**
+         * @returns Promisse
+         */
+        this.listRunning = function () {
+            var req = {
+                method: 'GET',
+                url: '/jobs/running',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': $cookies.get('XSRF-TOKEN')
+                }
+            };
+            return $http(req);
+        };
+
+        /**
+         * @returns Promisse
+         */
         this.listJobsResult = function (page, limit, jobName, erros) {
             var req = {
                 method: 'GET',
