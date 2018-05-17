@@ -16,6 +16,7 @@ angular.module('webCronApp')
             JobsService.stopTigger(job)
                 .then(function (res) {
                     $log.debug(res.data);
+                    $scope.feedTable();
                 })
         };
 
