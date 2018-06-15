@@ -26,3 +26,4 @@ nbdist/
 .configs
 .configs/
 /configs/
+.DS_Store
