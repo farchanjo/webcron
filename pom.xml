@@ -28,7 +28,7 @@
         <commoncodec.version>1.10</commoncodec.version>
         <mysql.version>8.0.22</mysql.version>
         <newrelic.version>3.37.0</newrelic.version>
-        <quartz.version>2.3.0</quartz.version>
+        <quartz.version>2.3.2</quartz.version>
         <angularjs.version>1.6.4</angularjs.version>
     </properties>
 
