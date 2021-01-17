@@ -18,7 +18,8 @@ import java.util.Date;
 @Getter
 @Setter
 @CompoundIndexes({
-        @CompoundIndex(name = "findByUserId", def = "{'job.userId' : 1, created: -1}")
+        @CompoundIndex(name = "findByUserId", def = "{'job.userId' : 1, created: -1}"),
+        @CompoundIndex(name = "errorCreatedIdx", def = "{'errors' : 1, created: -1}")
 })
 @Document(collection = "executions")
 public class ExecutionStatusEntity implements Serializable {
