@@ -26,7 +26,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
 
 server:
   port: 8080
@@ -38,7 +38,7 @@ webcron:
     limit: 100
     page: 0
   logging:
-    folder: /Users/fabricio/1/log
+    folder: /home/fabricio/1/log
   shell:
     bin: /bin/bash
   system-user-file: /etc/passwd

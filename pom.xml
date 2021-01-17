@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.2.RELEASE</version>
+        <version>2.4.1</version>
         <relativePath/>
     </parent>
 
@@ -26,7 +26,7 @@
         <commonlang.version>3.4</commonlang.version>
         <commoncompress.version>1.10</commoncompress.version>
         <commoncodec.version>1.10</commoncodec.version>
-        <mysql.version>6.0.3</mysql.version>
+        <mysql.version>8.0.22</mysql.version>
         <newrelic.version>3.37.0</newrelic.version>
         <quartz.version>2.3.0</quartz.version>
         <angularjs.version>1.6.4</angularjs.version>
