@@ -74,7 +74,7 @@ public class CommandLineJob extends QuartzJobBean implements InterruptableJob {
         }
         commandList.add(config.getShell().getBin());
         commandList.add("-c");
-        commandList.add(command);
+        commandList.add(String.format("cd %s;%s", job.getDirectory(), command));
         return commandList;
     }
 
