@@ -47,9 +47,6 @@ public class QuartzService {
                 selectStatus(job, trigger);
                 break;
             case CRON:
-                if (!CronSequenceGenerator.isValidExpression(job.getCron())) {
-                    throw new BadRequestException(String.format("%s is not valid", job.getCron()));
-                }
                 trigger = scheduler.getTrigger(TriggerKey.triggerKey(getTriggerFormat(job), QuartzContants.THREAD_GROUP_CRON));
                 selectStatus(job, trigger);
                 break;

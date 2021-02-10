@@ -5,10 +5,12 @@ import br.eti.archanjo.webcron.dtos.ExecutionStatusDTO;
 import br.eti.archanjo.webcron.dtos.JobsDTO;
 import br.eti.archanjo.webcron.dtos.RunningJobDTO;
 import br.eti.archanjo.webcron.dtos.UserDTO;
+import br.eti.archanjo.webcron.enums.AsyncType;
 import br.eti.archanjo.webcron.enums.Roles;
 import br.eti.archanjo.webcron.exceptions.BadRequestException;
 import br.eti.archanjo.webcron.exceptions.NotAuthorizedException;
 import br.eti.archanjo.webcron.exceptions.NotFoundException;
+import org.quartz.CronExpression;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -46,8 +48,12 @@ public class JobsFacade {
     public JobsDTO save(UserDTO client, JobsDTO job) throws Exception {
         if (!client.getRoles().equals(Roles.ADMIN))
             throw new NotAuthorizedException("Only admin can save jobs");
+
         if (job.getCommand() == null)
             throw new NotFoundException("Missing commmand to run");
+
+        if (job.getAsync().equals(AsyncType.CRON) && !CronExpression.isValidExpression(job.getCron()))
+            throw new BadRequestException(String.format("%s is no valid", job.getCron()));
 
         if (job.getEnvironments() != null && job.getEnvironments()
                 .stream().anyMatch(p -> p.getKey() == null || p.getValue() == null))

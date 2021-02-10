@@ -114,7 +114,7 @@ public class Jobs {
         entity = jobsRepository.save(entity);
         JobsDTO dto = JobsParser.toDTO(entity);
         dto.setUserId(entity.getUser().getId());
-        quartzService.saveJob(dto);
+        quartzService.saveJob(job);
         return JobsParser.toDTO(entity);
     }
 
